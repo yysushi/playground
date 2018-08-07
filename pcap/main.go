@@ -92,14 +92,29 @@ func main() {
 		}
 	}
 	normalizedStart := start.Round(time.Minute)
+	var counters []int
 	for baseTime := normalizedStart; baseTime.Before(end); baseTime = baseTime.Add(time.Minute) {
-		counts := 0
+		counter := 0
 		for _, stream := range tcpStreams {
 			begin, finish := stream.getTimeRange()
 			if !(finish.Before(baseTime) || begin.After(baseTime.Add(time.Minute))) {
-				counts = counts + 1
+				counter = counter + 1
 			}
 		}
-		fmt.Printf("%s,%d\n", baseTime, counts)
+		counters = append(counters, counter)
+		fmt.Printf("%s,%d\n", baseTime.Format("2006-01-02T15:04:05Z"), counter)
 	}
+	minCounter := 100
+	maxCounter := 0
+	sumCounters := 0
+	for _, counter := range counters {
+		sumCounters = sumCounters + counter
+		if minCounter > counter {
+			minCounter = counter
+		}
+		if maxCounter < counter {
+			maxCounter = counter
+		}
+	}
+	fmt.Printf("%d,%d,%f\n", maxCounter, minCounter, float64(sumCounters)/float64(len(counters)))
 }
