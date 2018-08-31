@@ -1,0 +1,12 @@
+{
+	"ImportPath": "github.com/koketani/playground/go/tools/godep",
+	"GoVersion": "go1.10",
+	"GodepVersion": "v80",
+	"Deps": [
+		{
+			"ImportPath": "github.com/mitchellh/mapstructure",
+			"Comment": "v1.0.0",
+			"Rev": "fa473d140ef3c6adf42d6b391fe76707f1f243c8"
+		}
+	]
+}
