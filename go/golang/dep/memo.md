@@ -111,3 +111,35 @@ $ go list --json
         ]
 }
 ```
+
+* with `vendor` directory, we don't need copy under `$GOPATH`
+```
+koketani:~/Developments/go/src/github.com/koketani/playground/go/golang/dep (master *=)$ rm -rf /home/koketani/Developments/go/src/github.com/mitchellh/mapstructure
+koketani:~/Developments/go/src/github.com/koketani/playground/go/golang/dep (master *=)$ go run main.go
+main.go:7:2: cannot find package "github.com/mitchellh/mapstructure" in any of:
+        /home/koketani/.gvm/gos/go1.10/src/github.com/mitchellh/mapstructure (from $GOROOT)
+        /home/koketani/Developments/go/src/github.com/mitchellh/mapstructure (from $GOPATH)
+koketani:~/Developments/go/src/github.com/koketani/playground/go/golang/dep (master *=)$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        deleted:    vendor/github.com/mitchellh/mapstructure/.travis.yml
+        deleted:    vendor/github.com/mitchellh/mapstructure/LICENSE
+        deleted:    vendor/github.com/mitchellh/mapstructure/README.md
+        deleted:    vendor/github.com/mitchellh/mapstructure/decode_hooks.go
+        deleted:    vendor/github.com/mitchellh/mapstructure/error.go
+        deleted:    vendor/github.com/mitchellh/mapstructure/go.mod
+        deleted:    vendor/github.com/mitchellh/mapstructure/mapstructure.go
+
+no changes added to commit (use "git add" and/or "git commit -a")
+koketani:~/Developments/go/src/github.com/koketani/playground/go/golang/dep (master *=)$ git reset --hard
+HEAD is now at 86c2b5c add an example of golang/dep
+koketani:~/Developments/go/src/github.com/koketani/playground/go/golang/dep (master=)$ go run main.go
+{person koke}
+main.Person
+koketani:~/Developments/go/src/github.com/koketani/playground/go/golang/dep (master *=)$ ls /home/koketani/Developments/go/src/github.com/mitchellh/mapstructure
+ls: cannot access '/home/koketani/Developments/go/src/github.com/mitchellh/mapstructure': No such file or directory
+```
