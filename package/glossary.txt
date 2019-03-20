@@ -1,0 +1,24 @@
+https://packaging.python.org/glossary/
+https://pythonhosted.org/an_example_pypi_project/setuptools.html
+
+- distribution
+  - source distribution: a distribution format (using python setup.py sdist) that provides metadata and the essential source files needed for installing by a tool like pip, or for generating a Built Distribution.
+
+  - built distribution: a distribution format containing files and metadata that only need to be moved to the correct location on the target system, to be installed. Wheel is such a format, whereas distutil’s Source Distribution is not, in that it requires a build step before it can be installed. This format does not imply that Python files have to be precompiled (Wheel intentionally does not include compiled Python files).
+
+    - binary distribution: one kind
+    - egg: one of format by setuptools
+
+- module
+  - pure module: a module written by python like *.py
+  - extension module: a module written in the low-level language
+    - a single dynamically loadable pre-compiled file like *.so (shared object)
+
+- package
+  - distribution package
+  - import package
+
+  - system package
+
+- package vs module
+- pip vs setup.py
