@@ -90,14 +90,61 @@ drwxr-xr-x koketani/koketani 0 2019-05-07 18:03 mypackage-1.0.2/mypackage.egg-in
   - python setup.py bdist_egg
   - python setup.py bdist_wheel
 
-- diffs
+```bash
+koketani:~/Developments/git/github.com/koketani/playground/python/builtin/package (master *%>)$ date; python setup.py bdist -v
+Tue May  7 19:07:43 JST 2019
+running bdist
+running bdist_dumb
+running build
+installing to build/bdist.linux-x86_64/dumb
+running install
+running install_egg_info
+running egg_info
+writing requirements to mypackage.egg-info/requires.txt
+writing mypackage.egg-info/PKG-INFO
+writing top-level names to mypackage.egg-info/top_level.txt
+writing dependency_links to mypackage.egg-info/dependency_links.txt
+reading manifest file 'mypackage.egg-info/SOURCES.txt'
+writing manifest file 'mypackage.egg-info/SOURCES.txt'
+Copying mypackage.egg-info to build/bdist.linux-x86_64/dumb/usr/local/lib/python2.7/dist-packages/mypackage-1.0.2.egg-info
+running install_scripts
+Creating tar archive
+removing 'build/bdist.linux-x86_64/dumb' (and everything under it)
+```
+
+- diffs after the command
 
 ```bash
-koketani:~/Developments/git/github.com/koketani/study-python/package (master *=)$ ls dist/
-mypackage-1.0.2-py3-none-any.whl  mypackage-1.0.2-py3.6.egg  mypackage-1.0.2.linux-x86_64.tar.gz  mypackage-1.0.2.tar.gz
-koketani:~/Developments/git/github.com/koketani/study-python/package (master *=)$
+koketani:~/Developments/git/github.com/koketani/playground/python/builtin/package (master *%>)$ tar -ztvf dist/mypackage-1.0.2.tar.gz
+drwxr-xr-x koketani/koketani 0 2019-05-07 18:03 mypackage-1.0.2/
+-rw-r--r-- koketani/koketani 7 2019-05-07 17:50 mypackage-1.0.2/README.md
+drwxr-xr-x koketani/koketani 0 2019-05-07 18:03 mypackage-1.0.2/mypackage.egg-info/
+-rw-r--r-- koketani/koketani 1 2019-05-07 18:03 mypackage-1.0.2/mypackage.egg-info/top_level.txt
+-rw-r--r-- koketani/koketani 182 2019-05-07 18:03 mypackage-1.0.2/mypackage.egg-info/SOURCES.txt
+-rw-r--r-- koketani/koketani   1 2019-05-07 18:03 mypackage-1.0.2/mypackage.egg-info/dependency_links.txt
+-rw-r--r-- koketani/koketani 312 2019-05-07 18:03 mypackage-1.0.2/mypackage.egg-info/PKG-INFO
+-rw-r--r-- koketani/koketani  24 2019-05-07 18:03 mypackage-1.0.2/mypackage.egg-info/requires.txt
+-rw-r--r-- koketani/koketani 312 2019-05-07 18:03 mypackage-1.0.2/PKG-INFO
+-rw-r--r-- koketani/koketani  38 2019-05-07 18:03 mypackage-1.0.2/setup.cfg
+-rw-r--r-- koketani/koketani 475 2019-05-07 16:27 mypackage-1.0.2/setup.py
+koketani:~/Developments/git/github.com/koketani/playground/python/builtin/package (master *%>)$ tar -ztvf dist/mypackage-1.0.2.linux-x86_64.tar.gz
+drwxr-xr-x koketani/koketani 0 2019-05-07 19:07 ./
+drwxr-xr-x koketani/koketani 0 2019-05-07 19:07 ./usr/
+drwxr-xr-x koketani/koketani 0 2019-05-07 19:07 ./usr/local/
+drwxr-xr-x koketani/koketani 0 2019-05-07 19:07 ./usr/local/lib/
+drwxr-xr-x koketani/koketani 0 2019-05-07 19:07 ./usr/local/lib/python2.7/
+drwxr-xr-x koketani/koketani 0 2019-05-07 19:07 ./usr/local/lib/python2.7/dist-packages/
+drwxr-xr-x koketani/koketani 0 2019-05-07 19:07 ./usr/local/lib/python2.7/dist-packages/mypackage-1.0.2.egg-info/
+-rw-r--r-- koketani/koketani 1 2019-05-07 19:07 ./usr/local/lib/python2.7/dist-packages/mypackage-1.0.2.egg-info/top_level.txt
+-rw-r--r-- koketani/koketani 182 2019-05-07 19:07 ./usr/local/lib/python2.7/dist-packages/mypackage-1.0.2.egg-info/SOURCES.txt
+-rw-r--r-- koketani/koketani   1 2019-05-07 19:07 ./usr/local/lib/python2.7/dist-packages/mypackage-1.0.2.egg-info/dependency_links.txt
+-rw-r--r-- koketani/koketani 312 2019-05-07 19:07 ./usr/local/lib/python2.7/dist-packages/mypackage-1.0.2.egg-info/PKG-INFO
+-rw-r--r-- koketani/koketani  24 2019-05-07 19:07 ./usr/local/lib/python2.7/dist-packages/mypackage-1.0.2.egg-info/requires.txt
 ```
 
 ### wheel
+
+```
+```
 
 ### egg
