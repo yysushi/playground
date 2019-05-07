@@ -2,9 +2,15 @@
 
 ## all commands
 
+- <https://docs.python.org/ja/3.6/distutils/builtdist.html>
+
+`Distutils はモジュール配布物 (ここでは Distutils 自体) をビルドし、"偽の (fake)" インストールを (build ディレクトリで) 行います。そして現在のプラットフォームにおける標準の形式でビルド済み配布物を生成します。デフォルトのビルド済み形式とは、Unixでは "ダム (dumb)" の tar ファイルで、 Windows ではシンプルな実行形式のインストーラになります。(tar ファイルは、特定の場所に手作業で解凍しないと動作しないので、 "ダム: 賢くない" 形式とみなします。)`
+
+`ビルド済み配布物は、モジュール配布物をインストール作業者にとってできるだけ簡単な状況にする方法です: ビルド済み配布物は、RPM ベースの Linux システムユーザにとってはバイナリ RPM、Windows ユーザにとっては実行可能なインストーラ、Debian ベースの Linux システムでは Debian パッケージ、などといった具合です。`
+
 ```bash
-python setup.py --help-commands
-...
+koketani:~/Developments/git/github.com/koketani/playground/python/builtin/package (master %>)$ python setup.py --help-commands
+Standard commands:
   build             build everything needed to install
   build_py          "build" pure Python modules (copy to build directory)
   build_ext         build C/C++ extensions (compile/link to build directory)
@@ -22,8 +28,33 @@ python setup.py --help-commands
   bdist_dumb        create a "dumb" built distribution
   bdist_rpm         create an RPM distribution
   bdist_wininst     create an executable installer for MS Windows
-  check             perform some checks on the package
   upload            upload binary package to PyPI
+  check             perform some checks on the package
+
+Extra commands:
+  saveopts          save supplied options to setup.cfg or other config file
+  compile_catalog   compile message catalogs to binary MO files
+  develop           install package in 'development mode'
+  upload_docs       Upload documentation to PyPI
+  extract_messages  extract localizable strings from the project code
+  init_catalog      create a new catalog based on a POT file
+  test              run unit tests after in-place build
+  update_catalog    update message catalogs from a POT file
+  flake8            Run Flake8 on modules registered in setup.py
+  setopt            set an option in setup.cfg or another config file
+  install_egg_info  Install an .egg-info directory for the package
+  rotate            delete older distributions, keeping N newest files
+  bdist_wheel       create a wheel distribution
+  egg_info          create a distribution's .egg-info directory
+  alias             define a shortcut to invoke one or more commands
+  easy_install      Find/get/install Python packages
+  bdist_egg         create an "egg" distribution
+  dist_info         create a .dist-info directory
+
+usage: setup.py [global_opts] cmd1 [cmd1_opts] [cmd2 [cmd2_opts] ...]
+   or: setup.py --help [cmd1 cmd2 ...]
+   or: setup.py --help-commands
+   or: setup.py cmd --help
 ```
 
 ## source distribution
