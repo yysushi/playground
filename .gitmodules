@@ -1,3 +1,3 @@
 [submodule "pymotw-3"]
-	path = pymotw-3
+	path = python/builtin/pymotw-3
 	url = https://bitbucket.org/dhellmann/pymotw-3
