@@ -174,6 +174,8 @@ removing 'build/bdist.linux-x86_64/egg' (and everything under it)
 - diffs after the command
 
 ```bash
+koketani:~/Developments/git/github.com/koketani/playground/python/builtin/package (master *%>)$ file dist/mypackage-1.0.2-py2.7.egg
+dist/mypackage-1.0.2-py2.7.egg: Zip archive data, at least v2.0 to extract
 koketani:~/Developments/git/github.com/koketani/playground/python/builtin/package (master *%>)$ unzip -l dist/mypackage-1.0.2-py2.7.egg
 Archive:  dist/mypackage-1.0.2-py2.7.egg
   Length      Date    Time    Name
@@ -191,9 +193,47 @@ Archive:  dist/mypackage-1.0.2-py2.7.egg
 ### wheel
 
 ```bash
+koketani:~/Developments/git/github.com/koketani/playground/python/builtin/package (master %>)$ date; python setup.py bdist_wheel -v
+Tue May  7 19:16:53 JST 2019
+running bdist_wheel
+running build
+installing to build/bdist.linux-x86_64/wheel
+running install
+running install_egg_info
+running egg_info
+writing requirements to mypackage.egg-info/requires.txt
+writing mypackage.egg-info/PKG-INFO
+writing top-level names to mypackage.egg-info/top_level.txt
+writing dependency_links to mypackage.egg-info/dependency_links.txt
+reading manifest file 'mypackage.egg-info/SOURCES.txt'
+writing manifest file 'mypackage.egg-info/SOURCES.txt'
+Copying mypackage.egg-info to build/bdist.linux-x86_64/wheel/mypackage-1.0.2.egg-info
+running install_scripts
+creating build/bdist.linux-x86_64/wheel/mypackage-1.0.2.dist-info/WHEEL
+creating '/home/koketani/Developments/git/github.com/koketani/playground/python/builtin/package/dist/mypackage-1.0.2-py2-none-any.whl' and adding '.' to it
+adding 'mypackage-1.0.2.dist-info/DESCRIPTION.rst'
+adding 'mypackage-1.0.2.dist-info/metadata.json'
+adding 'mypackage-1.0.2.dist-info/top_level.txt'
+adding 'mypackage-1.0.2.dist-info/WHEEL'
+adding 'mypackage-1.0.2.dist-info/METADATA'
+adding 'mypackage-1.0.2.dist-info/RECORD'
 ```
 
 - diffs after the command
 
 ```bash
+koketani:~/Developments/git/github.com/koketani/playground/python/builtin/package (master *%>)$ file dist/mypackage-1.0.2-py2-none-any.whl
+dist/mypackage-1.0.2-py2-none-any.whl: Zip archive data, at least v2.0 to extract
+koketani:~/Developments/git/github.com/koketani/playground/python/builtin/package (master *%>)$ unzip -l dist/mypackage-1.0.2-py2-none-any.whl
+Archive:  dist/mypackage-1.0.2-py2-none-any.whl
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+       10  2019-05-07 10:16   mypackage-1.0.2.dist-info/DESCRIPTION.rst
+      549  2019-05-07 10:16   mypackage-1.0.2.dist-info/metadata.json
+        1  2019-05-07 10:16   mypackage-1.0.2.dist-info/top_level.txt
+       92  2019-05-07 10:16   mypackage-1.0.2.dist-info/WHEEL
+      386  2019-05-07 10:16   mypackage-1.0.2.dist-info/METADATA
+      501  2019-05-07 10:16   mypackage-1.0.2.dist-info/RECORD
+---------                     -------
+     1539                     6 files
 ```
