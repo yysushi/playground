@@ -1,0 +1,4 @@
+requests
+
+[play]
+jinja2

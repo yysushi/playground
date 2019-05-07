@@ -1,0 +1,12 @@
+Metadata-Version: 2.1
+Name: mypackage
+Version: 1.0.2
+Summary: mypackage description
+Home-page: https://github.com/koketani/study-python/pakcage/myproject
+Author: koketani
+Author-email: yyyyyykoketani@gmail.com
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Requires-Python: >=3.6.0
+Provides-Extra: play
