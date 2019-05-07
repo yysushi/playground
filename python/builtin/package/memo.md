@@ -142,9 +142,58 @@ drwxr-xr-x koketani/koketani 0 2019-05-07 19:07 ./usr/local/lib/python2.7/dist-p
 -rw-r--r-- koketani/koketani  24 2019-05-07 19:07 ./usr/local/lib/python2.7/dist-packages/mypackage-1.0.2.egg-info/requires.txt
 ```
 
+### egg
+
+```bash
+koketani:~/Developments/git/github.com/koketani/playground/python/builtin/package (master %>)$ date; python setup.py bdist_egg -v
+Tue May  7 19:13:03 JST 2019
+running bdist_egg
+running egg_info
+writing requirements to mypackage.egg-info/requires.txt
+writing mypackage.egg-info/PKG-INFO
+writing top-level names to mypackage.egg-info/top_level.txt
+writing dependency_links to mypackage.egg-info/dependency_links.txt
+reading manifest file 'mypackage.egg-info/SOURCES.txt'
+writing manifest file 'mypackage.egg-info/SOURCES.txt'
+installing library code to build/bdist.linux-x86_64/egg
+running install_lib
+warning: install_lib: 'build/lib.linux-x86_64-2.7' does not exist -- no Python modules to install
+
+creating build/bdist.linux-x86_64/egg
+creating build/bdist.linux-x86_64/egg/EGG-INFO
+copying mypackage.egg-info/PKG-INFO -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying mypackage.egg-info/SOURCES.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying mypackage.egg-info/dependency_links.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying mypackage.egg-info/requires.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying mypackage.egg-info/top_level.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+zip_safe flag not set; analyzing archive contents...
+creating 'dist/mypackage-1.0.2-py2.7.egg' and adding 'build/bdist.linux-x86_64/egg' to it
+removing 'build/bdist.linux-x86_64/egg' (and everything under it)
+```
+
+- diffs after the command
+
+```bash
+koketani:~/Developments/git/github.com/koketani/playground/python/builtin/package (master *%>)$ unzip -l dist/mypackage-1.0.2-py2.7.egg
+Archive:  dist/mypackage-1.0.2-py2.7.egg
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+      312  2019-05-07 19:13   EGG-INFO/PKG-INFO
+      182  2019-05-07 19:13   EGG-INFO/SOURCES.txt
+        1  2019-05-07 19:13   EGG-INFO/dependency_links.txt
+       24  2019-05-07 19:13   EGG-INFO/requires.txt
+        1  2019-05-07 19:13   EGG-INFO/top_level.txt
+        1  2019-05-07 19:13   EGG-INFO/zip-safe
+---------                     -------
+      521                     6 files
+```
+
 ### wheel
 
-```
+```bash
 ```
 
-### egg
+- diffs after the command
+
+```bash
+```
