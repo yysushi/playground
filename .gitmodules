@@ -1,6 +1,3 @@
 [submodule "pymotw-3"]
 	path = python/builtin/pymotw-3
 	url = https://bitbucket.org/dhellmann/pymotw-3
-[submodule "js/nvm_npm/nvm"]
-	path = js/nvm_npm/nvm
-	url = https://github.com/nvm-sh/nvm

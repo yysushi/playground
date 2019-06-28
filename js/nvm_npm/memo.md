@@ -29,7 +29,7 @@ node -v
     - it is sometimes public
   - unscoped package: package-name
 
-### install/download
+### install/download package
 
 - download/install packages locally
 
@@ -79,7 +79,7 @@ node -v
 - npm
 
 ```bash
-\$ docker build -t hoge .
+\$ docker run -it node .
 ```
 
 ## note for myself
