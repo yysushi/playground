@@ -1,15 +1,22 @@
 # about nvm and npm
 
 ## nvm
+
 manage version of nodejs
 
 - commands
 
-```
-nvm install --lts
-nvm use --lts
+```bash
+\$ nvm install --lts
+\$ nvm use --lts
 
-node -v
+\$ node -v
+\$ npm -v
+```
+
+```bash
+\$ nvm install node
+\$ nvm use node
 ```
 
 - difference b/w node and nodejs
@@ -20,11 +27,15 @@ node -v
 
 ### first things to know
 
-- package: a file or directory described by a package.json; group of one or more modules
+- package: a file or directory described by a package.json;
+group of one or more modules
   - to publish npm registry, package.json is must to be included
   - name and version are included
-- module: any file or directory in the `node_modules` directory that can be located by the Node.js `require()` function
-- scope: package private/public type. unscoped packages are always public. some scoped packages are public, but, others are private. by defualt, scoped packages are private (= need pass command line to make them public).
+- module: any file or directory in the `node_modules` directory
+that can be located by the Node.js `require()` function
+- scope: package private/public type. unscoped packages are always public.
+some scoped packages are public, but, others are private.
+by defualt, scoped packages are private (= need pass command line to make them public).
   - scoped package: @user-name/package-name
     - it is sometimes public
   - unscoped package: package-name
