@@ -1,5 +1,7 @@
 # python package
 
+<https://gist.github.com/koketani/f561f26a246de0bf4f2b6e6fcd4d65e0>
+
 ## all commands
 
 - <https://docs.python.org/ja/3.6/distutils/builtdist.html>
