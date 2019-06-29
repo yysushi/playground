@@ -1,0 +1,15 @@
+{
+  "name": "playground",
+  "version": "1.0.0",
+  "description": "always wip :)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/koketani/playground/js/node"
+  },
+  "author": "koketani",
+  "license": "ISC"
+}
