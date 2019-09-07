@@ -17,6 +17,7 @@ class Person(object):
         time.sleep(seconds)
 
     def is_where(self):
+        print(self.SOURCE)
         with urllib.request.urlopen('http://' + self.SOURCE) as f:
             data = f.read()
         return json.loads(data)['origin'].split(',')[0]
