@@ -2,11 +2,34 @@ package main
 
 import (
 	"fmt"
+	"regexp"
 
 	"github.com/xeipuuv/gojsonschema"
 )
 
+func IsID(cand string) bool {
+	match, _ := regexp.MatchString(`^#[0-9]{3}$`, cand)
+	return match
+}
+
+type myIDFmtChecker struct{}
+
+func (m myIDFmtChecker) IsFormat(input interface{}) bool {
+	asString, ok := input.(string) // Numbers are always float64 here
+	if !ok {
+		return false
+	}
+	// match, _ := regexp.MatchString(`^#[0-9]{3}$`, asString)
+	// return match
+	return IsID(asString)
+}
+
 func main() {
+
+	gojsonschema.FormatCheckers.Add("myidfmt", myIDFmtChecker{})
+	fmt.Println(gojsonschema.FormatCheckers.Has("myidfmt"))
+	// gojsonschema.FormatCheckers.IsFormat()
+
 	schemaLoader := gojsonschema.NewStringLoader(schemaString)
 
 	schema, err := gojsonschema.NewSchema(schemaLoader)
@@ -58,6 +81,10 @@ const schemaString = `
 					},
 					"value": {
 						"type": "boolean"
+					},
+					"id": {
+						"type": "string",
+						"format": "myidfmt"
 					}
 				}
 			}
@@ -66,7 +93,9 @@ const schemaString = `
 }
   `
 
-var responses [2]string = [2]string{
+var responses [4]string = [4]string{
 	`{"value":[{"name":"key1","value":true}, {"name":"key2","value":true}]}`,
+	`{"value":[{"name":"key1","value":true}, {"name":"key2","value":true,"id":"#123"}]}`,
+	`{"value":[{"name":"key1","value":true}, {"name":"key2","value":true,"id":"123"}]}`,
 	`{"value":[{"name":"key1","value":true}, {"name":"key2","value":[true]}]}`,
 }
