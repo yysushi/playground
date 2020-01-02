@@ -14,3 +14,9 @@
   - iostream is the input output class in C++.
 
 <https://stackoverflow.com/questions/28764438/what-the-difference-between-stdio-h-and-iostream?answertab=votes#tab-top>
+
+- Why should I use <iostream> instead of the traditional <cstdio>?
+
+Increase type safety, reduce errors, allow extensibility, and provide inheritability.
+
+<https://isocpp.org/wiki/faq/input-output#iostream-vs-stdio>
