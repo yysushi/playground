@@ -1,0 +1,18 @@
+
+https://golang.org/pkg/testing/
+
+1. basic_test.go => basic test
+2. benchmark_test.go => benchmarks
+3. example_test.go => examples
+4. skip_test.go => skip
+5. sub_test.go => sub tests and sub benchmark tests
+6. main_test.go => main
+
+- go test -v -run Basic
+- go test -v test_basic.go
+- go test -v -short
+- go test -v -run Foo
+- go test -v -run Foo/A=2
+- go test -v -run Foo/B
+
+- go test -v -parallel 3
