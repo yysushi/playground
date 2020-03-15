@@ -1,0 +1,18 @@
+koketani:fx (master %=)$ go run main.go
+2020/03/14 22:26:07 [Fx] PROVIDE        *log.Logger <= main.NewLogger()
+2020/03/14 22:26:07 [Fx] PROVIDE        http.Handler <= main.NewHandler()
+2020/03/14 22:26:07 [Fx] PROVIDE        *http.ServeMux <= main.NewMux()
+2020/03/14 22:26:07 [Fx] PROVIDE        fx.Lifecycle <= go.uber.org/fx.New.func1()
+2020/03/14 22:26:07 [Fx] PROVIDE        fx.Shutdowner <= go.uber.org/fx.(*App).shutdowner-fm()
+2020/03/14 22:26:07 [Fx] PROVIDE        fx.DotGraph <= go.uber.org/fx.(*App).dotGraph-fm()
+2020/03/14 22:26:07 [Fx] INVOKE         main.Register()
+Executing NewLogger.
+Executing NewMux.
+Executing NewHandler.
+2020/03/14 22:26:07 [Fx] START          main.NewMux()
+Starting HTTP server.
+2020/03/14 22:26:07 [Fx] RUNNING
+Got a request.
+2020/03/14 22:26:07 [Fx] STOP           main.NewMux()
+Stopping HTTP server.
+
