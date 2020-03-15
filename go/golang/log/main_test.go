@@ -29,8 +29,17 @@ func Test_flags_default(t *testing.T) {
 func Example_flags_customize() {
 	log.SetOutput(os.Stdout)
 	log.SetFlags(log.Lshortfile | log.Lmsgprefix)
-	log.Println(log.Flags())
+	log.Println("hello")
 
 	// Output:
-	// main_test.go:32: 80
+	// main_test.go:32: hello
+}
+
+func Example_flags_zero() {
+	log.SetOutput(os.Stdout)
+	log.SetFlags(0)
+	log.Println("hello")
+
+	// Output:
+	// hello
 }
