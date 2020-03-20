@@ -3,9 +3,10 @@ package main
 import (
 	"context"
 	"log"
+	"net"
 	"net/http"
 	"os"
-	"time"
+	// "time"
 
 	"go.uber.org/fx"
 )
@@ -124,9 +125,11 @@ func NewMux(lc fx.Lifecycle, logger *log.Logger) *http.ServeMux {
 		// passed via Go's usual context.Context.
 		OnStart: func(context.Context) error {
 			logger.Print("Starting HTTP server.")
-			// In production, we'd want to separate the Listen and Serve phases for
-			// better error-handling.
-			go server.ListenAndServe()
+			ln, err := net.Listen("tcp", server.Addr)
+			if err != nil {
+				return err
+			}
+			go server.Serve(ln)
 			return nil
 		},
 		OnStop: func(ctx context.Context) error {
@@ -177,23 +180,24 @@ func main() {
 		fx.Invoke(Register),
 	)
 
-	// In a typical application, we could just use app.Run() here. Since we
-	// don't want this example to run forever, we'll use the more-explicit Start
-	// and Stop.
-	startCtx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
-	defer cancel()
-	if err := app.Start(startCtx); err != nil {
-		log.Fatal(err)
-	}
+	app.Run()
+	// // In a typical application, we could just use app.Run() here. Since we
+	// // don't want this example to run forever, we'll use the more-explicit Start
+	// // and Stop.
+	// startCtx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	// defer cancel()
+	// if err := app.Start(startCtx); err != nil {
+	// 	log.Fatal(err)
+	// }
 
 	// Normally, we'd block here with <-app.Done(). Instead, we'll make an HTTP
 	// request to demonstrate that our server is running.
 	http.Get("http://localhost:8080/")
 
-	stopCtx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
-	defer cancel()
-	if err := app.Stop(stopCtx); err != nil {
-		log.Fatal(err)
-	}
+	// stopCtx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	// defer cancel()
+	// if err := app.Stop(stopCtx); err != nil {
+	// 	log.Fatal(err)
+	// }
 
 }
