@@ -1,0 +1,14 @@
+
+- implment handler and register
+  1. call http.HandleFunc() with custom function
+     => TestServer1
+  2. implement Handler interface in custom struct and call http.Handle()
+     => TestServer3
+
+- with new multiplexer
+  1 => TestServer4
+  2 => TestServer5
+
+- with new server
+  1 => TestServer6
+  2 => TestServer7
