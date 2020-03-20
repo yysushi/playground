@@ -83,7 +83,11 @@ type Server
   }
   ```
 
-- how to serve 
+- how to serve
+
+  - see [server examples](./server_example)
+
+- how is implemented background
 
   - ListenAndServe is mapped to Serve and it is default mapped to serve mux's ServeHTTP
     <https://golang.org/src/net/http/server.go?s=77114:81434#L1895>
