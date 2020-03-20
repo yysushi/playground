@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
+	"strings"
 	"sync"
 
 	"testing"
@@ -66,7 +67,9 @@ func TestHTTPServer(t *testing.T) {
 	if err != nil {
 		t.Fatalf("no error but %s", err)
 	}
-	fmt.Println(string(b))
+	if strings.Compare(string(b), "hello1\n") != 0 {
+		t.Fatalf("expected hello1\\n, but %s", string(b))
+	}
 	if err := s.Shutdown(context.Background()); err != nil {
 		t.Fatalf("no error but %s", err)
 	}
