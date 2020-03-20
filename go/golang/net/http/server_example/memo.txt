@@ -4,11 +4,15 @@
      => TestServer1
   2. implement Handler interface in custom struct and call http.Handle()
      => TestServer3
+  3. implement Handler interface with http.HandlerFunc() and call http.Handle()
+     => TestServer4
 
 - with new multiplexer
-  1 => TestServer4
-  2 => TestServer5
+  1. => TestServer5
+  2. => TestServer6
+  3. => TestServer7
 
 - with new server
-  1 => TestServer6
-  2 => TestServer7
+  1. => TestServer8
+  2. => TestServer9
+  3. => TestServer10

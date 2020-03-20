@@ -28,6 +28,7 @@ func (h *MyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "my name is %s\n", h.Name)
 }
 
+// not good example
 func TestServer2(t *testing.T) {
 	var h *MyHandler = &MyHandler{
 		Name: "handler2",
@@ -48,30 +49,51 @@ func TestServer3(t *testing.T) {
 }
 
 func TestServer4(t *testing.T) {
-	m := http.NewServeMux()
-	m.HandleFunc("/handler4", func(w http.ResponseWriter, r *http.Request) {
+	h := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "my name is handler4\n")
 	})
-	if err := http.ListenAndServe(":8080", m); err != nil {
+	http.Handle("/handler4", h)
+	if err := http.ListenAndServe(":8080", h); err != nil {
 		panic(err)
 	}
 }
 
 func TestServer5(t *testing.T) {
-	h := &MyHandler{
-		Name: "handler5",
-	}
 	m := http.NewServeMux()
-	m.Handle("/handler5", h)
+	m.HandleFunc("/handler5", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "my name is handler5\n")
+	})
 	if err := http.ListenAndServe(":8080", m); err != nil {
 		panic(err)
 	}
 }
 
 func TestServer6(t *testing.T) {
+	h := &MyHandler{
+		Name: "handler6",
+	}
 	m := http.NewServeMux()
-	m.HandleFunc("/handler4", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "my name is handler4\n")
+	m.Handle("/handler6", h)
+	if err := http.ListenAndServe(":8080", m); err != nil {
+		panic(err)
+	}
+}
+
+func TestServer7(t *testing.T) {
+	h := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "my name is handler7\n")
+	})
+	m := http.NewServeMux()
+	m.Handle("/handler7", h)
+	if err := http.ListenAndServe(":8080", m); err != nil {
+		panic(err)
+	}
+}
+
+func TestServer8(t *testing.T) {
+	m := http.NewServeMux()
+	m.HandleFunc("/handler8", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "my name is handler8\n")
 	})
 	s := &http.Server{
 		Addr:    ":8080",
@@ -82,12 +104,12 @@ func TestServer6(t *testing.T) {
 	}
 }
 
-func TestServer7(t *testing.T) {
+func TestServer9(t *testing.T) {
 	h := &MyHandler{
-		Name: "handler7",
+		Name: "handler9",
 	}
 	m := http.NewServeMux()
-	m.Handle("/handler7", h)
+	m.Handle("/handler9", h)
 	s := &http.Server{
 		Addr:    ":8080",
 		Handler: m,
@@ -97,14 +119,29 @@ func TestServer7(t *testing.T) {
 	}
 }
 
-// func TestServer8(t *testing.T) {
+func TestServer10(t *testing.T) {
+	h := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "my name is handler10\n")
+	})
+	m := http.NewServeMux()
+	m.Handle("/handler10", h)
+	s := &http.Server{
+		Addr:    ":8080",
+		Handler: m,
+	}
+	if err := s.ListenAndServe(); err != nil {
+		panic(err)
+	}
+}
+
+// func TestServer11(t *testing.T) {
 // 	h := &MyHandler{
-// 		Name: "handler8",
+// 		Name: "handler11",
 // 	}
 // 	m := http.NewServeMux()
-// 	m.Handle("/handler8", h)
+// 	m.Handle("/handler11", h)
 // 	m2 := http.NewServeMux()
-// 	m2.Handle("/handler8", m)
+// 	m2.Handle("/handler11", m)
 // 	if err := http.ListenAndServe(":8080", m2); err != nil {
 // 		panic(err)
 // 	}
