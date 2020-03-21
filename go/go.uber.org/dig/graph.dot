@@ -1,0 +1,24 @@
+digraph {
+	rankdir=RL;
+	graph [compound=true];
+	
+		subgraph cluster_0 {
+			constructor_0 [shape=plaintext label="main.func1"];
+			
+			"*main.Config" [label=<*main.Config>];
+			
+		}
+		
+		
+		subgraph cluster_1 {
+			constructor_1 [shape=plaintext label="main.func2"];
+			
+			"*log.Logger" [label=<*log.Logger>];
+			
+		}
+		
+			constructor_1 -> "*main.Config" [ltail=cluster_1];
+		
+		
+	
+}

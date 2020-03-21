@@ -1,0 +1,2 @@
+go run main.go
+dot -Tpng graph.dot -ograph.png
