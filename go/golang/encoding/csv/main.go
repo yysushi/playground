@@ -3,31 +3,20 @@ package main
 import (
 	// "bufio"
 	"encoding/csv"
-	// "io"
+	// "io/ioutil"
 	"log"
 	"os"
 )
 
 func main() {
+	// 1. os.Open, csv.NewReader, r.ReadAll
 	f, err := os.Open("hoge.csv")
 	if err != nil {
+		log.Fatal(err)
 		return
 	}
-	// r := bufio.NewReader(f)
+	defer f.Close()
 	r := csv.NewReader(f)
-	// for {
-	// 	record, err := r.Read()
-	// 	if err != nil && err != io.EOF {
-	// 		log.Fatal(err)
-	// 		return
-	// 	}
-	// 	if len(record) != 0 {
-	// 		records = append(records, record)
-	// 	}
-	// 	if err == io.EOF {
-	// 		break
-	// 	}
-	// }
 	records, err := r.ReadAll()
 	if err != nil {
 		log.Fatal(err)
