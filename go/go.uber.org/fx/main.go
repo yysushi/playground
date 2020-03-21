@@ -17,7 +17,7 @@ type Config struct {
 
 // NewConfig ...
 func NewConfig() *Config {
-	configFileName := flag.String("config", "config.sample.json", "")
+	configFileName := flag.String("config", "config.sample.json", "configuration file the server reads")
 	flag.Parse()
 	b, err := ioutil.ReadFile(*configFileName)
 	if err != nil {
