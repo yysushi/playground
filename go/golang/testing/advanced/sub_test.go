@@ -15,6 +15,8 @@ func setupSubTest(t *testing.T) func(t *testing.T) {
 	}
 }
 
+// testing.M provides environment for setup/teardown, but it is for all tests in file
+// this example defines test suites as collection of subsets whose purpose is same
 // https://stackoverflow.com/questions/42310088/setup-and-teardown-for-each-test-using-std-testing-package/42310257#42310257
 func TestAdvancedSub(t *testing.T) {
 	cases := []struct {
