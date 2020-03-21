@@ -14,6 +14,7 @@ func TestReadFile1(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	defer f.Close()
 	// func ioutil.ReadAll(r io.Reader) ([]byte, error)
 	b, err := ioutil.ReadAll(f)
 	if err != nil {
@@ -31,6 +32,7 @@ func TestReadFile2(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	defer f.Close()
 
 	// func bufio.NewReader(rd io.Reader) *bufio.Reader
 	r := bufio.NewReader(f)
@@ -52,6 +54,7 @@ func TestReadFile3(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	defer f.Close()
 
 	// func bufio.NewReader(rd io.Reader) *bufio.Reader
 	r := bufio.NewReader(f)

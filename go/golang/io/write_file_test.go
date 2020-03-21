@@ -15,6 +15,7 @@ func TestWriteFile1(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	defer f.Close()
 
 	// func bufio.NewWriter(w io.Writer) *bufio.Writer
 	w := bufio.NewWriter(f)
@@ -44,6 +45,7 @@ func TestWriteFile3(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	defer f.Close()
 	w := bufio.NewWriter(f)
 	// func fmt.Fprintf(w io.Writer, format string, a ...interface{}) (n int, err error)
 	fmt.Fprintf(w, "ccc")
