@@ -16,19 +16,19 @@ type Config struct {
 }
 
 // NewConfig ...
-func NewConfig() *Config {
+func NewConfig() (*Config, error) {
 	configFileName := flag.String("config", "config.sample.json", "configuration file the server reads")
 	flag.Parse()
 	b, err := ioutil.ReadFile(*configFileName)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	var config Config
 	err = json.Unmarshal(b, &config)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	return &config
+	return &config, nil
 }
 
 // NewServeMux ...
