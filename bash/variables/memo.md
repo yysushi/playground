@@ -18,3 +18,18 @@ FUGA2
 
 FUGA2
 ```
+
+log
+
+```shell-session
+bash-4.4# bash script/shell-variable.sh
+FUGA1
+FUGA2
+
+FUGA2
+bash-4.4# ls /tmp
+tmp.gHpIHo
+bash-4.4# cat /tmp/tmp.gHpIHo
+echo $HOGE1
+echo $HOGE2
+```
