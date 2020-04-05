@@ -60,13 +60,13 @@ type Server
 
 - how to register a handler
 
-  1. pass handler
+  1. pass handler to http.Handle (there are two ways to define/instantiate handler. see above.)
 
   ```golang
   http.Handle("/", handler)
   ```
 
-  2. pass handler func
+  2. pass func to http.HandleFunc
 
   ```golang
   http.HandleFunc("/", func(w ResponseWriter, *Request) {fmt.Fprintln(w, "hello")})
