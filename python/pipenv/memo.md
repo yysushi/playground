@@ -18,7 +18,7 @@ koketani:pipenv (master %=)$ ls
 memo.md venv
 ```
 
-- `pipenv install`: mkvirtualenv hoge
+- `pipenv --python 3.8`: mkvirtualenv hoge
 
 ```shell-session
 koketani:pipenv (master %=)$ pipenv install
