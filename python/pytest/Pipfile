@@ -12,9 +12,16 @@ python-language-server = "*"
 proselint = "*"
 pipenv = "*"
 tox = "*"
+tldr = "*"
+pynvim = "*"
+vint = "*"
+rstcheck = "*"
+graphviz = "*"
+v = {editable = true,version = "*"}
 
 [packages]
 requests = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.7"
