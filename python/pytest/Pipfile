@@ -4,10 +4,14 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+flake8 = "*"
+python-language-server = "*"
+pipenv = "*"
+pynvim = "*"
 
 [packages]
 pytest = "*"
-myfunc = {path = "."}
+myFunc = {path = "."}
 
 [requires]
 python_version = "3.7"
