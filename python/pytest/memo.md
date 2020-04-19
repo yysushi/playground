@@ -56,3 +56,10 @@ assert/test_advanced_assert.py:5: AssertionError
 FAILED assert/test_advanced_assert.py::test_answer - assert 4 == 5
 ===================================================================================================== 1 failed, 3 passed in 0.06s ======================================================================================================
 ```
+
+## Features
+
+- assert
+- discover
+- class
+- fixture
