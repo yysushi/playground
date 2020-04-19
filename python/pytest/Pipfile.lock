@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "baccb05feca5eda9ee00f01f64dca3c0f3432ce13f7d5e97401eb7a0cfac8946"
+            "sha256": "def4f063310b7b38ce144b124b2401ee37634b14dc71c7760f23556d76654f1d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -39,6 +39,7 @@
             "version": "==8.2.0"
         },
         "myfunc": {
+            "editable": true,
             "path": "."
         },
         "packaging": {

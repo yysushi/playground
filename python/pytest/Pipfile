@@ -11,7 +11,7 @@ pynvim = "*"
 
 [packages]
 pytest = "*"
-myFunc = {path = "."}
+myFunc = {editable = true,path = "."}
 
 [requires]
 python_version = "3.7"
