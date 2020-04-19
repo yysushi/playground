@@ -4,17 +4,14 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pytest = "*"
-docker-compose = "*"
 flake8 = "*"
-yamllint = "*"
 python-language-server = "*"
-proselint = "*"
 pipenv = "*"
-tox = "*"
+pynvim = "*"
 
 [packages]
-requests = "*"
+pytest = "*"
+myFunc = {path = "."}
 
 [requires]
 python_version = "3.7"
