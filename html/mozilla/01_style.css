@@ -1,0 +1,14 @@
+html {
+  background-color: green;
+  font-size: 20px;
+}
+
+ul {
+  background: red;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+li {
+  margin-left: 20px;
+}
