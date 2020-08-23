@@ -21,7 +21,7 @@ import (
 // )
 
 func Test_flags_default(t *testing.T) {
-	if initFlag := log.Flags(); initFlag != 3 {
+	if initFlag := log.Flags(); initFlag != (log.Ldate | log.Ltime) {
 		t.Errorf("expected 3, but %v", initFlag)
 	}
 }
