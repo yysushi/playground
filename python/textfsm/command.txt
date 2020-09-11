@@ -1,0 +1,4 @@
+koketani: ~/g/g/k/p/p/textfsm (master +!?)$ ./venv/bin/python example.py template raw_text_data
+Slot, State, CPUUser, CPUKernel, Model, SerialID
+0, Master, 95, 4, RE-4.0, xxxxxxxxxxxx
+1, Backup, 0, 0, RE-4.0, yyyyyyyyyyyy
