@@ -1,0 +1,84 @@
+the very basics with functions, variables, and the most primitive types
+
+---
+
+primitive types
+
+https://docs.oracle.com/javase/specs/jls/se7/html/jls-4.html
+
+The types of the Java programming language are divided into two categories: primitive types and reference types. The primitive types (§4.2) are the boolean type and the numeric types. The numeric types are the integral types byte, short, int, long, and char, and the floating-point types float and double. The reference types (§4.3) are class types, interface types, and array types. There is also a special null type. An object (§4.3.1) is a dynamically created instance of a class type or a dynamically created array. The values of a reference type are references to objects. All objects, including arrays, support the methods of class Object (§4.3.2). String literals are represented by String objects (§4.3.3).
+
+---
+
+variable
+
+- snake_case (not camelCase)
+- declared using the "let" keyword
+
+---
+
+variable modification
+
+there are two types of
+- immutable: this is default behavior. allow variable to be only read from.
+- mutable
+
+mutable variable can be declared with "mut" keyword.
+
+---
+
+booleans - bool
+unsigned integers - u8 u16 u32 u64 u128
+signed integers - i8 i16 i32 i64 i128
+pointer sized integers - usize isize for representing indexes and sizes of things in memory
+floating point - f32 f64
+tuple - (value, value, ...) for passing fixed sequences of values on the stack
+arrays - [value, value, ...] a collection of similar elements with fixed length known at compile time
+slices - a collection of similar elements with length known at runtime
+str(string slice) - text with a length known at runtime
+
+---
+
+cast
+
+let c = 3u8 as u32 + 12;
+
+---
+
+costant needs explicit types
+
+the name should be SCREAMING_SNAKE_CASE
+
+const PI: f32 = 3.14159;
+
+---
+
+array is a fixed length collection of data elements all of the same type
+
+let nums: [i32; 3] = [1, 2, 3];
+println!("{:?}", nums);
+
+"{:?}" prints with debug mode
+https://stackoverflow.com/a/38157410
+
+---
+
+fn swap(x: i32, y: i32) -> (i32, i32) {
+    return (y, x);
+}
+
+function name should be snake_case
+
+multiple value can be returned as tuple
+
+---
+
+unit ()
+
+return type if not specified
+
+equals to an empty tuple
+
+---
+
+
