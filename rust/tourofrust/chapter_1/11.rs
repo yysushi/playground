@@ -10,13 +10,12 @@ fn make_nothing2() {
 fn main() {
     let a = make_nothing();
     // let b = make_nothing2();
-    // let b = make_nothing2();
-    make_nothing2();
-    let b = 1;
+    let b = make_nothing2();
+    // make_nothing2();
+    // let b = 1;
 
     // Printing a debug string for a and b
     // Because it's hard to print nothingness
     println!("The value of a: {:?}", a);
     println!("The value of b: {:?}", b);
-    println!("The value of b: {}", b);
 }
