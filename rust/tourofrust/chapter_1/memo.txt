@@ -1,3 +1,7 @@
+The Basics
+
+---
+
 the very basics with functions, variables, and the most primitive types
 
 ---
