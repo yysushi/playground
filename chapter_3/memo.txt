@@ -1,0 +1,73 @@
+Basic Data Structure Types
+
+---
+
+struct SeaCreature {
+    animal_type: String,
+    legs: i32,
+}
+
+---
+
+static methods: using the :: operator. belong to the type.
+instance methods: using the . operator. belong to an instance.
+
+---
+
+memory
+
+data memory: For data that is fixed in size and static (i.e. always available through life of program). Consider the text in your program (e.g. "Hello World!"): This text's bytes are only ever read from one place and therefore can be stored in this region. Compilers make lots of optimizations with this kind of data, and they are generally considered very fast to use since locations are known and fixed.
+stack memory: For data that is declared as variables within a function. The location of this memory never changes for the duration of a function call; because of this compilers can optimize code so stack data is very fast to access.
+heap memory - For data that is created while the application is running. Data in this region may be added, moved, removed, resized, etc. Because of its dynamic nature it's generally considered slower to use, but it allows for much more creative usages of memory. When data is added to this region we call it an allocation. When data is removed from this section we call it a deallocation.
+
+---
+
+struct SeaCreature {
+    animal_type: String,
+    arms: i32,
+}
+
+let ferris = SeaCreature {
+    animal_type: String::from("crab"),
+    arms: 2,
+}
+
+- data memory
+"crab"
+
+- stack memory
+ferris
+
+- heap memory
+ferris.animal_type
+
+---
+
+struct Location(i32, i32);
+let loc = Location(42, 32);
+loc.0
+
+---
+
+unit-like struct
+
+struct Marker;
+
+---
+
+enum Species {
+    Crab,
+    Fish,
+}
+
+Species::Crab
+
+---
+
+https://ja.wikipedia.org/wiki/%E5%85%B1%E7%94%A8%E4%BD%93
+
+- An enum data value will have a memory size equal to its largest element. This allows for all potential values to fit in the same space of memory.
+- In addition to element data types (if any), each element also has a numeric value that represents which tag it is.
+
+- Rust's enum is something also known as a tagged union.
+- The combining of types to make a new type is what people mean when they say Rust has algebraic types.
