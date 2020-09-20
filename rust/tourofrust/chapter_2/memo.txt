@@ -1,0 +1,49 @@
+Basic Control Flow
+
+---
+
+no parentheses
+
+if x < 42 {
+    println!("less than 42");
+}
+
+---
+
+loop {
+    if x == 42 {
+        break
+    }
+}
+
+---
+
+while x != 42{
+}
+
+---
+
+for x in 0..5 {}
+for x in 0..=5 {}
+
+---
+
+match x {
+    0 => {}
+    _ => {}
+}
+
+---
+
+let x = loop {
+    break "loop value";
+}
+
+---
+
+block expression
+
+let v = if x < 42 { -1 } else { 1 };
+let v = { let a = 1; a }
+fn example() -> int32 { 3 }
+let result = match food { _ => "hotdog" }
