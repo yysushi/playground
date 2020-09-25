@@ -1,0 +1,118 @@
+---
+
+let foo = Foo { x: 42 };
+
+type instantiating and defining variable are equal to creating a memory resource
+"foo" is the resource owner
+
+---
+
+the end of scope is the place to deconstruct and deallocate a resource
+
+- Rust does not have garbage collection.
+- This is also called Resource Aquisition Is Initialization ( RAII ) in C++.
+
+---
+
+dropping is hierarchical. children is dropped as following the parent's one
+
+foo
+foo.bar
+
+- By automatically freeing memory Rust helps ensure that there are fewer memory leaks.
+- Memory resources can only be dropped once.
+
+---
+
+variable ownership is moved to when passed to the function parameter
+
+- During a move the stack memory of the owners value is copied to the function call's parameter stack memory.
+
+---
+
+function return value's ownership is moved out to its outside variable
+
+---
+
+reference (&) allows us to access the resource
+
+borrow the ownership
+
+---
+
+mutable reference (&mut) also allows to access/write the resource
+
+but, prevents having two ways to mutate an owned value because it introduces the possibility of a data race.
+=> 49.rs
+
+---
+
+for copyable types, using the * operator enables to copy the value
+
+---
+
+summary about references rules
+- Rust only allows there to be one mutable reference or multiple non-mutable references but not both.
+- A reference must never live longer than its owner.
+
+the first rule for data race
+
+the second rule for mis-referring to non-existent data (dangling pointers in C)
+
+---
+
+References Of References
+
+---
+
+Explicit Lifetimes
+
+fn do_something<'a>(foo: &'a Foo) -> &'a i32 {
+    return &foo.x;
+}
+
+---
+
+// foo_b and the return value share the same lifetime
+// foo_a has an unrelated lifetime
+fn do_something<'a, 'b>(foo_a: &'a Foo, foo_b: &'b Foo) -> &'b i32 {
+    println!("{}", foo_a.x);
+    println!("{}", foo_b.x);
+    return &foo_b.x;
+}
+
+---
+
+static lifetime is one during running the program.
+
+literal, const, global variables are examples.
+- 1, "abc"
+- const N: i32 = 5;
+- static N: i32 = 5;
+
+"'static" assures never drop the lifetime
+
+---
+
+unsafe blocks enable us to violate a rule
+like editting static and
+
+---
+
+lifetime can be parameterized for the data type
+
+need extend a reference since it never lasts than the owners its references point to
+=> 55.rs
+
+---
+
+what rust resolves for us
+
+- Unintentional modification of resources
+- Forgetting to deconstruct resources
+- Resources accidentally being deconstructed twice
+- Using resources after they have been deconstructed
+- Data races caused by writing to resources while others are reading from resources
+- Seeing clearly areas of the code where the compiler can’t make guarantees
+
+---
