@@ -74,4 +74,7 @@ a.push(1);
 
 vec![1, 2];
 
+- Vec is a struct, but internally it contains a reference to a fixed list of its items on the heap.
+- A vector starts with a default capacity; when more items are added than it has capacity for, it reallocates its data on the heap to have a new fixed list with large capacity.
+
 ---
