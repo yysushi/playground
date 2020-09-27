@@ -1,0 +1,90 @@
+---
+
+String literals are always Unicode
+
+String literals type are &'static str
+
+---
+
+ascii code allows only 256 characters (1 byte)
+
+on the other hand, utf-8 was introduced with a variable byte length of 1-4 bytes greatly increasing the range of possible characters.
+
+An advantage of variable sized characters is text did not have unnecessary bytes for very common ASCII (only requiring 1 byte still in utf-8).
+an index of given numbered character is unknown.  we must iterate through a utf-8 byte sequence to understand where the Unicode characters actually begin (O(n) linear time).
+
+---
+
+\n - newline
+\r - carriage return
+\t - tab
+\\ - backslash
+\0 - null
+\' - single-quote
+
+https://doc.rust-lang.org/reference/tokens.html
+
+---
+
+rust strings are multiple lines by default
+
+\ disallows line breaking
+
+---
+
+raw strings allow us to write a sequence of characters verbatim like backslash and quote
+
+r#"<\>"""#
+
+- character
+- string
+- raw string
+- byte
+- byte string
+- raw byte string
+
+---
+
+methods of &str:
+
+- len gets the length of the string literal in bytes (not number of characters).
+- starts_with/ends_with for basic testing.
+- is_empty returns true if zero length.
+- find returns an Option<usize> of the first position of some text.
+
+---
+
+differently from strings, chars provide utf-8 bytes access.
+A char is always 4 bytes long (allowing for efficient lookup of individual characters).
+
+---
+
+str vs String
+
+https://stackoverflow.com/a/24159933
+
+- String is the dynamic heap string type, like Vec: use it when you need to own or modify your string data.
+- str is an immutable1 sequence of UTF-8 bytes of dynamic length somewhere in memory. Since the size is unknown, one can only handle it behind a pointer. This means that str most commonly2 appears as &str: a reference to some UTF-8 data, normally called a "string slice" or just a "slice". A slice is just a view onto some data, and that data can be anywhere, e.g.
+
+In summary, use String if you need owned string data (like passing strings to other threads, or building them at runtime), and use &str if you only need a view of a string.
+
+This is identical to the relationship between a vector Vec<T> and a slice &[T], and is similar to the relationship between by-value T and by-reference &T for general types.
+
+borrow &'static str as a &str
+borrow String as a &str
+
+---
+
+join
+concat
+
+---
+
+format!
+
+---
+
+to_string
+parse::<i32>
+
+---
