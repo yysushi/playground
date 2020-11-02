@@ -1,0 +1,161 @@
+oop
+
+- Encapsulation - Associating data and functions into the conceptual unit of a single type called an object.
+- Abstraction - Hiding data and function members to obfuscate implementation details of an object.
+- Polymorphism - The ability to interacting with an object from different functional perspectives.
+- Inheritance - The ability to inherit data and behavior from other objects.
+
+java
+
+https://beginnersbook.com/2013/04/oops-concepts/#4
+
+abstraction: show only “relevant” data and “hide” unnecessary details of an object => abstract class or interface, higher degree compared to class
+encapsulation: bind object state(fields) and behavior(methods) together (= create class) => class
+polymorphism: ある関数やメソッドなどが、引数や返り値の数やデータ型などの異なる複数の実装を持ち、呼び出し時に使い分けるようにできること。 => generics?? interface?? trait??
+inheritance: => child class objects interacts as superclass
+
+- abstraction vs encapsulation
+https://stackoverflow.com/a/15176477
+
+- abstract class (default method according to class ...) vs interface
+https://stackoverflow.com/a/18778307
+
+- duck typing
+
+
+golang
+
+継承は再利用と多相性に分けられる。それぞれembed, interfaceで実現。
+
+embeded-fieldが提供するのはis-aの関係でなく、has-aの関係。
+embedは委譲。転送？
+
+embeded-field => has-a, 関連
+embed (fieldを新たに命名) => part-of, 集約 or コンポジション
+
+https://golang.org/doc/effective_go.html#embedding
+
+“borrow” pieces of an implementation by embedding types within a struct or interface
+
+java
+
+https://docs.oracle.com/javase/tutorial/java/concepts/index.html
+
+```
+An object is a software bundle of related state and behavior. Software objects are often used to model the real-world objects that you find in everyday life. This lesson explains how state and behavior are represented within an object, introduces the concept of data encapsulation, and explains the benefits of designing your software in this manner.
+振る舞いと状態
+
+A class is a blueprint or prototype from which objects are created. This section defines a class that models the state and behavior of a real-world object. It intentionally focuses on the basics, showing how even a simple class can cleanly model state and behavior.
+オブジェクトの抽象化
+
+Inheritance provides a powerful and natural mechanism for organizing and structuring your software. This section explains how classes inherit state and behavior from their superclasses, and explains how to derive one class from another using the simple syntax provided by the Java programming language.
+振る舞いと状態の引き継ぎ
+
+An interface is a contract between a class and the outside world. When a class implements an interface, it promises to provide the behavior published by that interface. This section defines a simple interface and explains the necessary changes for any class that implements it.
+
+A package is a namespace for organizing classes and interfaces in a logical manner. Placing your code into packages makes large software projects easier to manage. This section explains why this is useful, and introduces you to the Application Programming Interface (API) provided by the Java platform.
+```
+
+https://ja.wikipedia.org/wiki/%E3%82%AF%E3%83%A9%E3%82%B9%E5%9B%B3#%E9%96%A2%E4%BF%82
+
+2.1	インスタンスレベルの関係
+2.1.1	リンク dependency
+2.1.2	関連 has-a association
+2.1.3	集約 part-of aggregation
+2.1.4	コンポジション part-of composition: https://stackoverflow.com/a/12431359 no way for the outside world to get a reference to internal component コンポジションの共有不可制約による
+2.1.4.1	集約とコンポジションの違い
+2.2	クラスレベルの関係
+2.2.1	汎化・特化 is-a generalization/inheritance
+
+object diagram, class diagram
+https://stackoverflow.com/a/19282850
+
+A Class Diagram will show what the Objects in your system consist of (members) and what they are capable of doing (methods).
+
+In contrast, an Object Diagram will show how objects in your system are interacting with each other at some point in time, and what values those objects contain when the program is in this state.
+
+---
+
+Rust lacks inheritance of data and behavior in any meaningful way.
+
+- Structs cannot inherit fields from a parent struct.
+- Structs cannot inherit functions from a parent struct.
+
+---
+
+struct and impl realize object state and behavior (method) in oop.
+
+```
+impl MyStruct { 
+    ...
+    fn foo(&self) {
+        ...
+    }
+}
+```
+
+&mut self is mutable reference
+
+---
+
+pub keyword exposes struct fields and methods outside of the module.
+
+default is private
+
+---
+
+rust support polymorphism with traits
+
+```
+trait NoiseMaker {
+    fn make_noise(&self);
+}
+
+impl NoiseMaker for SeaCreature {
+    fn make_noise(&self) {
+        println!("{}", &self.get_sound())
+    }
+}
+```
+
+enables us to interact with the struct through the trait type (e.g. &dyn MyTrait) without having to know the real type
+
+---
+
+trait also allows to implement methods on traits
+
+---
+
+trait can be inherited
+
+```
+trait LoudNoiseMaker: NoiseMaker {
+    fn make_alot_of_noise(&self) {
+        self.make_noise();
+        self.make_noise();
+    }
+}
+```
+
+---
+
+- static dispatch
+- dynamic dispatch: unknown instance type
+
+&dyn MyTrait
+
+=> like golang interface and struct
+
+rust can handle trait and struct as type
+
+---
+
+trait object
+
+it is a struct that holds the pointer of our instance with a list of function pointers to our instance's methods
+
+C++ as a vtable
+
+---
+
+---
