@@ -1,0 +1,5 @@
+a = iter([1])
+print(any(True for _ in a))
+print(any(True for _ in a))
+b = iter([])
+print(any(True for _ in b))
