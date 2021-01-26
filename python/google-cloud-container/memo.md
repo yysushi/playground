@@ -34,3 +34,10 @@ $ docker exec -it google-cloud-container gcloud auth login
 $ docker exec -it google-cloud-container gcloud auth application-default login
 $ docker exec google-cloud-container python clusters.py
 ```
+
+## Afterwards setup for kubernetes python
+
+```
+$ gcloud container clusters list
+$ gcloud container clusters get-credentials $NAME --zone $ZONE
+```
