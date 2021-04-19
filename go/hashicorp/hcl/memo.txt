@@ -1,0 +1,11 @@
+
+https://pkg.go.dev/github.com/hashicorp/hcl/v2@v2.8.2/gohcl
+
+https://pkg.go.dev/github.com/hashicorp/hcl/v2@v2.8.2/hclsimple
+
+
+hcl configuration syntax
+
+https://www.terraform.io/docs/language/syntax/configuration.html
+
+argument, block, label
