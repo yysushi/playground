@@ -1,0 +1,17 @@
+clang++ -c main.cpp hello.cpp
+clang++ -o a.out main.o hello.o
+./a.out
+
+```
+koketani: ~/g/g/k/p/c/step1 (cmake ?)$ tree .
+.
+├── a.out
+├── hello.cpp
+├── hello.hpp
+├── hello.o
+├── main.cpp
+├── main.o
+└── memo.txt
+
+0 directories, 7 files
+```

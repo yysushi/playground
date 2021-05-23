@@ -1,0 +1,59 @@
+cd build
+cmake ..
+make
+
+```
+koketani: ~/g/g/k/p/c/step2$ tree .
+.
+├── CMakeLists.txt
+├── build
+│   ├── CMakeCache.txt
+│   ├── CMakeFiles
+│   │   ├── 3.20.2
+│   │   │   ├── CMakeCXXCompiler.cmake
+│   │   │   ├── CMakeDetermineCompilerABI_CXX.bin
+│   │   │   ├── CMakeSystem.cmake
+│   │   │   └── CompilerIdCXX
+│   │   │       ├── CMakeCXXCompilerId.cpp
+│   │   │       ├── a.out
+│   │   │       └── tmp
+│   │   ├── CMakeDirectoryInformation.cmake
+│   │   ├── CMakeOutput.log
+│   │   ├── CMakeTmp
+│   │   ├── Makefile.cmake
+│   │   ├── Makefile2
+│   │   ├── TargetDirectories.txt
+│   │   ├── a.out.dir
+│   │   │   ├── DependInfo.cmake
+│   │   │   ├── build.make
+│   │   │   ├── cmake_clean.cmake
+│   │   │   ├── compiler_depend.internal
+│   │   │   ├── compiler_depend.make
+│   │   │   ├── compiler_depend.ts
+│   │   │   ├── depend.make
+│   │   │   ├── flags.make
+│   │   │   ├── hello.cpp.o
+│   │   │   ├── hello.cpp.o.d
+│   │   │   ├── link.txt
+│   │   │   ├── main.cpp.o
+│   │   │   ├── main.cpp.o.d
+│   │   │   └── progress.make
+│   │   ├── cmake.check_cache
+│   │   └── progress.marks
+│   ├── Makefile
+│   ├── a.out
+│   └── cmake_install.cmake
+├── hello.cpp
+├── hello.hpp
+├── main.cpp
+└── memo.txt
+
+7 directories, 35 files
+```
+
+```
+koketani: ~/g/g/k/p/c/s/build (cmake ?)$ otool -L a.out
+a.out:
+        /usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 902.1.0)
+        /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1281.100.1)
+```
