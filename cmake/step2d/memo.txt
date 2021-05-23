@@ -1,0 +1,19 @@
+cd build
+cmake ..
+make
+
+```
+koketani: ~/g/g/k/p/c/s/build (cmake +x?)$ otool -L a.out
+a.out:
+        @rpath/libgreetings.dylib (compatibility version 0.0.0, current version 0.0.0)
+        /usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 902.1.0)
+        /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1281.100.1)
+```
+
+```
+koketani: ~/g/g/k/p/c/step2c (cmake +x?)$ diff CMakeLists.txt ../step2b/CMakeLists.txt
+3c3
+< add_library(greetings SHARED hello.cpp good_morning.cpp)
+---
+> add_library(greetings STATIC hello.cpp good_morning.cpp)
+```

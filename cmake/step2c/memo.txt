@@ -1,0 +1,20 @@
+cd build
+cmake ..
+make
+
+```
+koketani: ~/g/g/k/p/c/step2a (cmake ?)$ otool -L a.out
+a.out:
+        /usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 902.1.0)
+        /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1281.100.1)
+```
+
+```
+koketani: ~/g/g/k/p/c/step2c (cmake +?)$ diff CMakeLists.txt ../step1b/CMakeLists.txt
+3,5c3
+< add_library(greetings STATIC hello.cpp good_morning.cpp)
+< add_executable(a.out main.cpp)
+< target_link_libraries(a.out greetings)
+---
+> add_executable(a.out main.cpp hello.cpp)
+```

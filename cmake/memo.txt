@@ -1,0 +1,19 @@
+step1a => basic sample
+step1b => basic sample in cmake
+
+step2a => basic static library sample
+step2b => basic shared library sample
+step2c => basic static library sample in cmake
+step2d => basic shared library sample in cmake
+
+koketani: ~/g/g/k/p/cmake$ tree -L 1
+.
+├── step1a
+├── step1b
+├── step2a
+├── step2b
+├── step2c
+└── step2d
+
+6 directories, 0 files
+
