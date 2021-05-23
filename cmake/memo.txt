@@ -5,6 +5,7 @@ step2a => basic static library sample
 step2b => basic shared library sample
 step2c => basic static library sample in cmake
 step2d => basic shared library sample in cmake
+step2e => basic optional library sample in cmake
 
 koketani: ~/g/g/k/p/cmake$ tree -L 1
 .
@@ -14,6 +15,7 @@ koketani: ~/g/g/k/p/cmake$ tree -L 1
 ├── step2b
 ├── step2c
 └── step2d
+└── step2e
 
-6 directories, 0 files
+7 directories, 0 files
 
