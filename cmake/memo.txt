@@ -7,15 +7,20 @@ step2c => basic static library sample in cmake
 step2d => basic shared library sample in cmake
 step2e => basic optional library sample in cmake
 
-koketani: ~/g/g/k/p/cmake$ tree -L 1
+step3a => basic practical sample
+step3b => basic practical sample in cmake
+
+koketani: ~/g/g/k/p/cmake (cmake ?)$ tree -L 1
 .
+├── memo.txt
 ├── step1a
 ├── step1b
 ├── step2a
 ├── step2b
 ├── step2c
-└── step2d
-└── step2e
+├── step2d
+├── step2e
+├── step3a
+└── step3b
 
-7 directories, 0 files
-
+9 directories, 1 file
