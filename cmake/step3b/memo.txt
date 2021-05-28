@@ -1,0 +1,20 @@
+koketani: ~/g/g/k/p/c/step3b (cmake ?)$ tree src test include
+src
+├── CMakeLists.txt
+├── good_morning.cpp
+├── good_morning.o
+├── hello.cpp
+├── hello.o
+└── libgreetings.so
+test
+├── CMakeLists.txt
+├── a.out
+└── main.cpp
+include
+├── good_morning.hpp
+└── hello.hpp
+
+0 directories, 11 files
+
+
+include header files are needed for greetings and a.out compilation. so, PUBLIC.

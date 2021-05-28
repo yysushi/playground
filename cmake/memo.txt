@@ -1,0 +1,28 @@
+https://qiita.com/shohirose/items/45fb49c6b429e8b204ac
+
+step1a => basic sample
+step1b => basic sample in cmake
+
+step2a => basic static library sample
+step2b => basic shared library sample
+step2c => basic static library sample in cmake
+step2d => basic shared library sample in cmake
+step2e => basic optional library sample in cmake
+
+step3a => basic practical sample
+step3b => basic practical sample in cmake
+
+koketani: ~/g/g/k/p/cmake (cmake ?)$ tree -L 1
+.
+├── memo.txt
+├── step1a
+├── step1b
+├── step2a
+├── step2b
+├── step2c
+├── step2d
+├── step2e
+├── step3a
+└── step3b
+
+9 directories, 1 file

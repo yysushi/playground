@@ -1,0 +1,10 @@
+clang++ -c hello.cpp good_morning.cpp 
+ar rvs libgreetings.a hello.o good_morning.o
+clang++ main.cpp libgreetings.a
+
+```
+koketani: ~/g/g/k/p/c/step2a (cmake ?)$ otool -L a.out
+a.out:
+        /usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 902.1.0)
+        /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1281.100.1)
+```

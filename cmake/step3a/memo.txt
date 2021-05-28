@@ -1,0 +1,22 @@
+koketani: ~/g/g/k/p/c/step3a (cmake ?)$ tree .
+.
+├── include
+│   ├── good_morning.hpp
+│   └── hello.hpp
+├── memo.txt
+├── src
+│   ├── good_morning.cpp
+│   ├── good_morning.o
+│   ├── hello.cpp
+│   ├── hello.o
+│   └── libgreetings.so
+└── test
+    └── main.cpp
+
+3 directories, 9 files
+
+cd src
+clang++ -fPIC -c hello.cpp good_morning.cpp -I../include
+clang++ -shared *.o -o libgreetings.so
+cd ../test
+clang++ main.cpp -I../include -L../src -lgreetings -Xlinker -rpath -Xlinker ../src
