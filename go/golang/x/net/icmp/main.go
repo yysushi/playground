@@ -100,7 +100,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer c.Close()
 
 	var wg sync.WaitGroup
 	var requests sync.Map
@@ -140,6 +139,7 @@ func main() {
 	// receiver
 	wg.Add(1)
 	go func() {
+		defer c.Close()
 		defer wg.Done()
 		for {
 			select {
