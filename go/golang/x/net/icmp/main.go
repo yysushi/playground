@@ -51,7 +51,6 @@ func main() {
 				wm := icmp.Message{
 					Type: ipv4.ICMPTypeEcho, Code: 0,
 					Body: &icmp.Echo{
-						// ID: os.Getpid() & 0xffff, Seq: 1,
 						ID: os.Getpid() & 0xffff, Seq: 1,
 						Data: []byte("HELLO-R-U-THERE"),
 					},
@@ -91,9 +90,8 @@ func main() {
 			}
 			switch rm.Type {
 			case ipv4.ICMPTypeEchoReply:
-				// m, _ := rm.Body.Marshal(1)
-				m := (rm.Body).(*icmp.Echo).Data
-				log.Printf("got reflection from %v with %s", peer, m)
+				m := (rm.Body).(*icmp.Echo)
+				log.Printf("got reflection from %v with (id:%d, seq:%d, data:%s)", peer, m.ID, m.Seq, m.Data)
 			default:
 				log.Printf("got %+v; want echo reply", rm)
 			}
