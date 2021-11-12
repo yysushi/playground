@@ -1,4 +1,4 @@
-module hoge
+module github.com/hanaugai/playground/go/golang/x/net/icmp
 
 go 1.17
 
