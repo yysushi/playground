@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// Request ...
 type Request struct {
 	pid    int
 	seq    int
@@ -25,6 +26,7 @@ func (r *Request) embeddedMessage() *embeddedMessage {
 	}
 }
 
+// Encode ...
 func (r *Request) Encode() []byte {
 	buf := new(bytes.Buffer)
 	binary.Write(buf, binary.LittleEndian, r.embeddedMessage())
@@ -41,12 +43,13 @@ func decodeEmbeddedMessage(s []byte) (*embeddedMessage, error) {
 	return &em, nil
 }
 
-type stat struct {
+type Stat struct {
 	Seq                 int
 	ElapsedMicroseconds time.Duration
 }
 
-func (r *Request) CalcStat(s []byte, seq int, recvAt time.Time) (*stat, error) {
+// CalcStat ...
+func (r *Request) CalcStat(s []byte, seq int, recvAt time.Time) (*Stat, error) {
 	em, err := decodeEmbeddedMessage(s)
 	if err != nil {
 		return nil, fmt.Errorf("decode failure: %s", err)
@@ -54,12 +57,13 @@ func (r *Request) CalcStat(s []byte, seq int, recvAt time.Time) (*stat, error) {
 	if int(em.PID) != r.pid {
 		return nil, fmt.Errorf("others (pid:%d)", em.PID)
 	}
-	return &stat{
+	return &Stat{
 		Seq:                 seq,
 		ElapsedMicroseconds: recvAt.Sub(r.sentAt),
 	}, nil
 }
 
+// NewRequest ...
 func NewRequest(pid int, seq int) *Request {
 	return &Request{
 		pid:    pid,
