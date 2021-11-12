@@ -58,6 +58,8 @@ func main() {
 	}
 	switch rm.Type {
 	case ipv4.ICMPTypeEchoReply:
+		m, _ := rm.Body.Marshal(1)
+		log.Println(string(m))
 		log.Printf("got reflection from %v", peer)
 	default:
 		log.Printf("got %+v; want echo reply", rm)
