@@ -37,6 +37,7 @@ type embeddedMessage struct {
 	PID int64
 }
 
+// this is workaround for linux
 func (r *request) embeddedMessage() *embeddedMessage {
 	return &embeddedMessage{
 		PID: int64(r.pid), // int is not propert to embed because a fixed size is necessary.
@@ -114,6 +115,7 @@ func main() {
 			select {
 			case <-time.After(time.Second):
 				r := newRequest(pid, i)
+				// garbage because receiver may miss the request
 				requests.Store(i, r)
 				wm := icmp.Message{
 					Type: ipv4.ICMPTypeEcho, Code: 0,
