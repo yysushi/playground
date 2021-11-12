@@ -108,6 +108,7 @@ func main() {
 	// sender
 	wg.Add(1)
 	go func() {
+		defer c.Close()
 		defer wg.Done()
 		for i := 1; i <= 100; i++ {
 			select {
@@ -139,7 +140,6 @@ func main() {
 	// receiver
 	wg.Add(1)
 	go func() {
-		defer c.Close()
 		defer wg.Done()
 		for {
 			select {
