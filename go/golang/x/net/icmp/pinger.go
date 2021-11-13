@@ -1,4 +1,4 @@
-package request
+package icmp
 
 import (
 	"bytes"
