@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
+	"math/rand"
 	"runtime"
 	"time"
 
@@ -42,6 +43,7 @@ func (r *Request) paddingBodySize() int {
 
 func (r *Request) fillInPaddingData(buf *bytes.Buffer) {
 	paddingMesage := make([]byte, r.paddingBodySize())
+	rand.Read(paddingMesage)
 	binary.Write(buf, binary.LittleEndian, paddingMesage)
 }
 
