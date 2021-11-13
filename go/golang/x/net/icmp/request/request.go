@@ -4,70 +4,103 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
+	"runtime"
 	"time"
+
+	"golang.org/x/net/icmp"
 )
 
 // Request ...
 type Request struct {
-	pid    int
-	seq    int
-	sentAt time.Time
+	pid      int
+	seq      int
+	sentAt   time.Time
+	bodySize int
 }
 
-// EmbeddedMessage ...
-type embeddedMessage struct {
-	PID int64
-}
-
-// this is workaround for linux
-func (r *Request) embeddedMessage() *embeddedMessage {
-	return &embeddedMessage{
-		PID: int64(r.pid), // int is not propert to embed because a fixed size is necessary.
+func (r *Request) embedMetaData(buf *bytes.Buffer) {
+	switch runtime.GOOS {
+	case "linux":
+		// we can't use ID field in a header of ICMP packet. this is a constraint in linux environment.
+		// int type, which is return value by os.Getpid(), is not proper to embed because the size depends on OS.
+		// man 5 proc says that PID_MAX_LIMIT is 2^22 in 64 bit machine. it is smaller than 2^31.
+		// hence, we convert a process ID to uint32 and embed it to the ICMP payload.
+		embeddedPID := int32(r.pid)
+		binary.Write(buf, binary.LittleEndian, embeddedPID)
+	default:
 	}
+}
+
+func (r *Request) paddingBodySize() int {
+	switch runtime.GOOS {
+	case "linux":
+		return r.bodySize - 4 // 4 byte = 32 bit / 8
+	default:
+		return r.bodySize
+	}
+}
+
+func (r *Request) fillInPaddingData(buf *bytes.Buffer) {
+	paddingMesage := make([]byte, r.paddingBodySize())
+	binary.Write(buf, binary.LittleEndian, paddingMesage)
 }
 
 // Encode ...
 func (r *Request) Encode() []byte {
 	buf := new(bytes.Buffer)
-	binary.Write(buf, binary.LittleEndian, r.embeddedMessage())
+	r.embedMetaData(buf)
+	r.fillInPaddingData(buf)
 	return buf.Bytes()
 }
 
-func decodeEmbeddedMessage(s []byte) (*embeddedMessage, error) {
-	buf := bytes.NewReader(s)
-	var em embeddedMessage
-	err := binary.Read(buf, binary.LittleEndian, &em)
-	if err != nil {
-		return nil, err
+func (r *Request) decodePID(m *icmp.Echo) (int, error) {
+	switch runtime.GOOS {
+	case "linux":
+	default:
+		return m.ID, nil
 	}
-	return &em, nil
+	// linux
+	buf := bytes.NewBuffer(m.Data[:4])
+	var pid int32
+	err := binary.Read(buf, binary.LittleEndian, &pid)
+	if err != nil {
+		return 0, err
+	}
+	return int(pid), nil
 }
 
+// Stat ...
 type Stat struct {
 	Seq                 int
 	ElapsedMicroseconds time.Duration
 }
 
 // CalcStat ...
-func (r *Request) CalcStat(s []byte, seq int, recvAt time.Time) (*Stat, error) {
-	em, err := decodeEmbeddedMessage(s)
+func (r *Request) CalcStat(m *icmp.Echo, recvAt time.Time) (*Stat, error) {
+	pid, err := r.decodePID(m)
 	if err != nil {
 		return nil, fmt.Errorf("decode failure: %s", err)
 	}
-	if int(em.PID) != r.pid {
-		return nil, fmt.Errorf("others (pid:%d)", em.PID)
+	if pid != r.pid {
+		return nil, fmt.Errorf("others (pid:%d)", pid)
 	}
 	return &Stat{
-		Seq:                 seq,
+		Seq:                 m.Seq,
 		ElapsedMicroseconds: recvAt.Sub(r.sentAt),
 	}, nil
 }
 
 // NewRequest ...
-func NewRequest(pid int, seq int) *Request {
+func NewRequest(pid, seq, bodySize int) *Request {
 	return &Request{
-		pid:    pid,
-		seq:    seq,
-		sentAt: time.Now(),
+		pid:      pid,
+		seq:      seq,
+		bodySize: bodySize,
 	}
+}
+
+// MarkSentAt ...
+func (r *Request) MarkSentAt() *Request {
+	r.sentAt = time.Now()
+	return r
 }

@@ -52,9 +52,10 @@ func main() {
 		for i := 1; i <= 100; i++ {
 			select {
 			case <-time.After(time.Second):
-				r := request.NewRequest(pid, i)
-				// garbage because receiver may miss the request
-				requests.Store(i, r)
+				// case <-time.After(time.Millisecond * 100):
+				r := request.NewRequest(pid, i, 1472)
+				// r := request.NewRequest(pid, i, 1473)
+				// r := request.NewRequest(pid, i, 100)
 				wm := icmp.Message{
 					Type: ipv4.ICMPTypeEcho, Code: 0,
 					Body: &icmp.Echo{
@@ -67,6 +68,8 @@ func main() {
 					log.Printf("failed to prepare icmp message: %s", err)
 					continue
 				}
+				// garbage because receiver may miss the request
+				requests.Store(i, r.MarkSentAt())
 				if _, err := c.WriteTo(wb, &net.UDPAddr{IP: net.ParseIP("8.8.8.8"), Zone: "en0"}); err != nil {
 					log.Printf("failed to send icmp message: %s", err)
 					continue
@@ -110,7 +113,7 @@ func main() {
 				} else {
 					r = rawRequest.(*request.Request)
 				}
-				stat, err := r.CalcStat(m.Data, m.Seq, recvAt)
+				stat, err := r.CalcStat(m, recvAt)
 				if err != nil {
 					log.Printf("got reflection from %v, but ignore with %s\n", peer, err)
 					continue
