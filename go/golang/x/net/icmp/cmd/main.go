@@ -13,7 +13,7 @@ import (
 	"golang.org/x/net/icmp"
 	"golang.org/x/net/ipv4"
 
-	pinger "github.com/hanaugai/playground/go/golang/x/net/icmp"
+	pingtest "github.com/hanaugai/playground/go/golang/x/net/icmp"
 )
 
 func outboundIP() string {
@@ -43,6 +43,7 @@ func main() {
 	var wg sync.WaitGroup
 	var requests sync.Map
 	pid := os.Getpid()
+	log.Println(pid)
 
 	// sender
 	wg.Add(1)
@@ -53,9 +54,9 @@ func main() {
 			select {
 			case <-time.After(time.Second):
 				// case <-time.After(time.Millisecond * 100):
-				r := pinger.NewRequest(pid, i, 1472)
-				// r := pinger.NewRequest(pid, i, 1473)
-				// r := pinger.NewRequest(pid, i, 100)
+				r := pingtest.NewRequest(pid, i, 1472)
+				// r := pingtest.NewRequest(pid, i, 1473)
+				// r := pingtest.NewRequest(pid, i, 100)
 				wm := icmp.Message{
 					Type: ipv4.ICMPTypeEcho, Code: 0,
 					Body: &icmp.Echo{
@@ -106,12 +107,12 @@ func main() {
 			switch rm.Type {
 			case ipv4.ICMPTypeEchoReply:
 				m := (rm.Body).(*icmp.Echo)
-				var r *pinger.Request
+				var r *pingtest.Request
 				if rawRequest, found := requests.LoadAndDelete(m.Seq); !found {
 					log.Printf("got reflection from %v, but ignore with unexpected seq %d\n", peer, m.Seq)
 					continue
 				} else {
-					r = rawRequest.(*pinger.Request)
+					r = rawRequest.(*pingtest.Request)
 				}
 				stat, err := r.CalcStat(m, recvAt)
 				if err != nil {
