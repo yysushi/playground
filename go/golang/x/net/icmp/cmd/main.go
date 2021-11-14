@@ -25,6 +25,14 @@ func outboundIP() string {
 	return conn.LocalAddr().(*net.UDPAddr).IP.String()
 }
 
+// func printChecksum(m *icmp.Message) {
+func printChecksum(mb []byte) {
+	// tmp := make([]byte, 1500)
+	// tmp, _ := m.Marshal(nil)
+	tmp2, _ := icmp.ParseMessage(1, mb)
+	log.Printf("checksum: %d\n", tmp2.Checksum)
+}
+
 func main() {
 	switch runtime.GOOS {
 	case "darwin":
@@ -69,6 +77,7 @@ func main() {
 					log.Printf("failed to prepare icmp message: %s", err)
 					continue
 				}
+				printChecksum(wb)
 				// garbage because receiver may miss the request
 				requests.Store(i, r.MarkSentAt())
 				if _, err := c.WriteTo(wb, &net.UDPAddr{IP: net.ParseIP("8.8.8.8"), Zone: "en0"}); err != nil {
