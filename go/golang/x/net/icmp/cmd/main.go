@@ -37,7 +37,7 @@ func main() {
 	switch runtime.GOOS {
 	case "darwin":
 	default:
-		log.Fatal("test only in darwin environment")
+		log.Printf("there may be a bug since we don't test in %s environment\n", runtime.GOOS)
 	}
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
