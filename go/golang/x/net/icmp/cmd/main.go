@@ -47,6 +47,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	err = c.IPv4PacketConn().SetTTL(1)
+	if err != nil {
+		log.Fatal("failed to set ttl:", err)
+	}
 
 	var wg sync.WaitGroup
 	var requests sync.Map
