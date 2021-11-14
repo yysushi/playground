@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"math/rand"
 	"net"
 	"os"
 	"os/signal"
@@ -15,6 +16,10 @@ import (
 
 	pingtest "github.com/hanaugai/playground/go/golang/x/net/icmp"
 )
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
 
 func outboundIP() string {
 	conn, err := net.Dial("udp", "8.8.8.8:80")
@@ -47,14 +52,14 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = c.IPv4PacketConn().SetTTL(1)
+	err = c.IPv4PacketConn().SetTTL(100)
 	if err != nil {
 		log.Fatal("failed to set ttl:", err)
 	}
 
 	var wg sync.WaitGroup
 	var requests sync.Map
-	pid := os.Getpid()
+	pid := rand.Intn(0xffff) // 16 bit for ICMP Echo message compatibility
 	log.Println(pid)
 
 	// sender
@@ -72,7 +77,7 @@ func main() {
 				wm := icmp.Message{
 					Type: ipv4.ICMPTypeEcho, Code: 0,
 					Body: &icmp.Echo{
-						ID: pid & 0xffff, Seq: i,
+						ID: pid, Seq: i, // no effect via datagram socket
 						Data: r.Encode(),
 					},
 				}

@@ -54,7 +54,7 @@ func (r *Request) CalcStat(m *icmp.Echo, recvAt time.Time) (*Stat, error) {
 }
 
 // NewRequest ...
-func NewRequest(pid, seq, bodySize int) *Request {
+func NewRequest(pid int, seq, bodySize int) *Request {
 	return &Request{
 		pid:      pid,
 		seq:      seq,
