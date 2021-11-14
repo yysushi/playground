@@ -45,6 +45,7 @@ func main() {
 		log.Fatal(err)
 	}
 	err = c.IPv4PacketConn().SetTTL(100)
+	// err = c.IPv4PacketConn().SetTTL(1)
 	if err != nil {
 		log.Fatal("failed to set ttl:", err)
 	}
@@ -113,47 +114,61 @@ func main() {
 				log.Printf("failed to parse icmp message: %s\n", err)
 				continue
 			}
-			switch rm.Type {
-			case ipv4.ICMPTypeEchoReply:
-				m := (rm.Body).(*icmp.Echo)
-				var r *pingtest.Request
-				if rawRequest, found := requests.LoadAndDelete(m.Seq); !found {
-					log.Printf("got reflection from %v, but ignore with unexpected seq %d\n", peer, m.Seq)
-					continue
-				} else {
-					r = rawRequest.(*pingtest.Request)
+			isEchoReply := rm.Type == ipv4.ICMPTypeEchoReply
+			if !isEchoReply {
+				switch rm.Type {
+				case ipv4.ICMPTypeDestinationUnreachable:
+					original := (rm.Body).(*icmp.DstUnreach)
+					rm, err = icmp.ParseMessage(1, original.Data[20:])
+					if err != nil {
+						log.Printf("failed to parse original request in icmp error in %#v: %s\n", rm, err)
+						continue
+					}
+				case ipv4.ICMPTypeTimeExceeded:
+					original := (rm.Body).(*icmp.TimeExceeded)
+					rm, err = icmp.ParseMessage(1, original.Data[20:])
+					if err != nil {
+						log.Printf("failed to parse original request in icmp error in %#v: %s\n", rm, err)
+						continue
+					}
+				case ipv4.ICMPTypeParameterProblem:
+					original := (rm.Body).(*icmp.ParamProb)
+					rm, err = icmp.ParseMessage(1, original.Data[20:])
+					if err != nil {
+						log.Printf("failed to parse original request in icmp error in %#v: %s\n", rm, err)
+						continue
+					}
+				default:
+					original := (rm.Body).(*icmp.RawBody)
+					rm, err = icmp.ParseMessage(1, original.Data[20:])
+					if err != nil {
+						log.Printf("failed to parse original request in icmp error in %#v: %s\n", rm, err)
+						continue
+					}
 				}
-				stat, err := r.CalcStat(m, recvAt)
-				if err != nil {
-					log.Printf("got reflection from %v, but ignore with %s\n", peer, err)
-					continue
-				}
+			}
+
+			m := (rm.Body).(*icmp.Echo)
+			// if err != nil {
+			// 	log.Printf("failed to handle icmp echo. it is broken: %s\n", err)
+			// 	continue
+			// }
+			var r *pingtest.Request
+			if rawRequest, found := requests.LoadAndDelete(m.Seq); !found {
+				log.Printf("got reflection from %v, but ignore with unexpected seq %d\n", peer, m.Seq)
+				continue
+			} else {
+				r = rawRequest.(*pingtest.Request)
+			}
+			stat, err := r.CalcStat(m, recvAt)
+			if err != nil {
+				log.Printf("got reflection from %v, but ignore with %s\n", peer, err)
+				continue
+			}
+			if isEchoReply {
 				log.Printf("got reflection from %v with %v\n", peer, stat.ElapsedMicroseconds)
-			// case ipv4.ICMPTypeDestinationUnreachable, ipv4.ICMPTypeTimeExceeded, ipv4.ICMPTypeParameterProblem:
-			case ipv4.ICMPTypeTimeExceeded:
-				log.Printf("got ttl %+v\n", rm)
-				m := (rm.Body).(*icmp.TimeExceeded)
-				v4Header, err := icmp.ParseIPv4Header(m.Data[:20])
-				if err != nil {
-					log.Printf("can't parse ipv4 header in icmp error %s\n", err)
-					continue
-				}
-				log.Printf("error when to %s\n", v4Header.Dst)
-				// check src and dst is correct
-				origin, err := icmp.ParseMessage(1, m.Data[20:])
-				if err != nil {
-					log.Printf("can't parse original icmp in icmp error %s\n", err)
-					continue
-				}
-				log.Printf("error origined by %#v\n", origin)
-				switch origin.Type {
-				case ipv4.ICMPTypeEcho:
-					om := (origin.Body).(*icmp.Echo)
-					log.Printf("origin body %#v \n", om)
-				}
-				// check type and
-			default:
-				log.Printf("got %+v; want echo reply\n", rm)
+			} else {
+				log.Printf("got error on %d", stat.Seq)
 			}
 		}
 	}()
