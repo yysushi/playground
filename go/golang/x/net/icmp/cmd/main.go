@@ -133,6 +133,29 @@ func main() {
 					continue
 				}
 				log.Printf("got reflection from %v with %v\n", peer, stat.ElapsedMicroseconds)
+			// case ipv4.ICMPTypeDestinationUnreachable, ipv4.ICMPTypeTimeExceeded, ipv4.ICMPTypeParameterProblem:
+			case ipv4.ICMPTypeTimeExceeded:
+				log.Printf("got ttl %+v\n", rm)
+				m := (rm.Body).(*icmp.TimeExceeded)
+				v4Header, err := icmp.ParseIPv4Header(m.Data[:20])
+				if err != nil {
+					log.Printf("can't parse ipv4 header in icmp error %s\n", err)
+					continue
+				}
+				log.Printf("error when to %s\n", v4Header.Dst)
+				// check src and dst is correct
+				origin, err := icmp.ParseMessage(1, m.Data[20:])
+				if err != nil {
+					log.Printf("can't parse original icmp in icmp error %s\n", err)
+					continue
+				}
+				log.Printf("error origined by %#v\n", origin)
+				switch origin.Type {
+				case ipv4.ICMPTypeEcho:
+					om := (origin.Body).(*icmp.Echo)
+					log.Printf("origin body %#v \n", om)
+				}
+				// check type and
 			default:
 				log.Printf("got %+v; want echo reply\n", rm)
 			}
