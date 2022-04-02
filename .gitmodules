@@ -1,6 +1,3 @@
 [submodule "pymotw-3"]
 	path = python/builtin/pymotw-3
 	url = https://bitbucket.org/dhellmann/pymotw-3
-[submodule "js/katas/katas"]
-	path = js/katas/katas
-	url = https://github.com/tddbin/katas
