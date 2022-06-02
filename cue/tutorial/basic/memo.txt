@@ -1,0 +1,141 @@
+
+1. json superset
+
+similar to json. can exported to json.
+
+```
+$ cat json/json.cue
+one: 1
+two: 2
+
+// A field using quotes.
+"two-and-a-half": 2.5
+
+list: [
+        1,
+        2,
+        3,
+]
+```
+
+```
+$ cue export json/json.cue
+{
+    "one": 1,
+    "two": 2,
+    "two-and-a-half": 2.5,
+    "list": [
+        1,
+        2,
+        3
+    ]
+}
+```
+
+2. data + scheme -> cue
+
+3. evaluate fields as follow rules
+
+- For values of basic types this means they must be equal.
+- For structs, fields are merged and duplicated fields are handled recursively.
+- For lists, all elements must match accordingly
+
+```
+a: 4
+a: 4
+
+s: {b: 2}
+s: {c: 2}
+
+l: [ 1, 2]
+l: [ 1, 2]
+```
+
+=>
+
+```
+$ cue eval duplicates/dup.cue
+a: 4
+s: {
+    b: 2
+    c: 2
+}
+l: [1, 2]
+```
+
+4. cue eval provides constraint check
+
+```
+$ cue eval constraints/check.cue
+schema: {
+    name:  string
+    age:   int
+    human: true
+}
+viola: {
+    name:  "Viola"
+    age:   38
+    human: true
+}
+```
+
+5. type definition (schema) & export json
+
+```
+$ cat schema/schema.cue
+#Conn: {
+        address:  string
+        port:     int
+        protocol: string
+        // ...    // uncomment this to allow any field
+}
+
+lossy: #Conn & {
+        address:  "1.2.3.4"
+        port:     8888
+        protocol: "udp"
+        // foo: 2 // uncomment this to get an error
+}
+```
+```
+$ cue export schema/schema.cue
+{
+    "lossy": {
+        "address": "1.2.3.4",
+        "port": 8888,
+        "protocol": "udp"
+    }
+}
+```
+
+6. type can be referenced as sharp #
+
+```
+$ cat validation/schema.cue
+#Language: {
+        tag:  string
+        name: =~"^\\p{Lu}" // Must start with an uppercase letter.
+}
+languages: [...#Language]
+```
+
+```
+$ cue vet validation/schema.cue validation/data.yaml
+languages.1.name: invalid value "dutch" (out of bound =~"^\\p{Lu}"):
+    ./validation/schema.cue:3:8
+    ./validation/data.yaml:5:12
+```
+
+7. order is irrelevant
+
+8. path-value pairs
+
+```
+$ cat fold/fold.cue
+// path-value pairs
+outer: middle1: inner: 3
+outer: middle2: inner: 7
+
+// collection-constraint pair
+outer: [string]: inner: int
+```
