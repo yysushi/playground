@@ -20,6 +20,8 @@ https://www.terraform.io/docs/glossary
     - the resource ID is defined with dot-concatenate like "docker_image.nginx"
     - block content indicates an argument to the resource
 
+  - output {} block (./outputs.tf): allows persist some customized state as outputs of the work
+
 - state
   - IDs and proprties of the resources
   - the only way terraform can track which resources it manages
@@ -31,3 +33,4 @@ https://www.terraform.io/docs/glossary
   - terraform show
   - terraform state list
   - terraform apply -var "container_name=YetAnotherName"
+

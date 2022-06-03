@@ -290,3 +290,47 @@ resource "docker_image" "nginx" {
 yysushi: ~/g/g/y/p/terraform (main !?)$ terraform state list
 docker_container.nginx
 docker_image.nginx
+
+yysushi: ~/g/g/y/p/terraform (main ⇡)$ terraform apply -var "container_name=YetAnotherName"
+docker_image.nginx: Refreshing state... [id=sha256:8f05d73835934b8220e1abd2f157ea4e2260b9c26f6f63a8e3975e7affa46724nginx:latest]
+docker_container.nginx: Refreshing state... [id=a18c3b53e8fb63cb5b4fa56664332c564f5c8df48e4301d76161fd1b757c8af4]
+
+Changes to Outputs:
+  + container_id = "a18c3b53e8fb63cb5b4fa56664332c564f5c8df48e4301d76161fd1b757c8af4"
+  + image_id     = "sha256:8f05d73835934b8220e1abd2f157ea4e2260b9c26f6f63a8e3975e7affa46724nginx:latest"
+
+You can apply this plan to save these new output values to the Terraform state, without changing any real infrastructure.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+
+Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+container_id = "a18c3b53e8fb63cb5b4fa56664332c564f5c8df48e4301d76161fd1b757c8af4"
+image_id = "sha256:8f05d73835934b8220e1abd2f157ea4e2260b9c26f6f63a8e3975e7affa46724nginx:latest"
+
+yysushi: ~/g/g/y/p/terraform (main ⇡!?)$ terraform show -json | jq '.values.outputs|to_entries'
+[
+  {
+    "key": "container_id",
+    "value": {
+      "sensitive": false,
+      "value": "a18c3b53e8fb63cb5b4fa56664332c564f5c8df48e4301d76161fd1b757c8af4",
+      "type": "string"
+    }
+  },
+  {
+    "key": "image_id",
+    "value": {
+      "sensitive": false,
+      "value": "sha256:8f05d73835934b8220e1abd2f157ea4e2260b9c26f6f63a8e3975e7affa46724nginx:latest",
+      "type": "string"
+    }
+  }
+]
