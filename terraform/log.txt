@@ -334,3 +334,18 @@ yysushi: ~/g/g/y/p/terraform (main ⇡!?)$ terraform show -json | jq '.values.ou
     }
   }
 ]
+
+yysushi: ~/g/g/y/p/terraform (main)$ terraform output -json
+{
+  "container_id": {
+    "sensitive": false,
+    "type": "string",
+    "value": "a18c3b53e8fb63cb5b4fa56664332c564f5c8df48e4301d76161fd1b757c8af4"
+  },
+  "image_id": {
+    "sensitive": false,
+    "type": "string",
+    "value": "sha256:8f05d73835934b8220e1abd2f157ea4e2260b9c26f6f63a8e3975e7affa46724nginx:latest"
+  }
+}
+

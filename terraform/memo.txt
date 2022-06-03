@@ -33,4 +33,4 @@ https://www.terraform.io/docs/glossary
   - terraform show
   - terraform state list
   - terraform apply -var "container_name=YetAnotherName"
-
+  - terraform output -json
