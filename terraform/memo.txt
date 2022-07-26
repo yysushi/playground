@@ -4,8 +4,8 @@ https://learn.hashicorp.com/tutorials/terraform/docker-build?in=terraform/docker
 https://www.terraform.io/docs/glossary
 
 - steps
-  - terraform init
-  - terraform apply
+  - terraform init: creating initial files, loading any remote state, downloading modules
+  - terraform apply: creates or updates infrastructure
   - terraform destroy
 
 - description ./main.tf
@@ -28,9 +28,10 @@ https://www.terraform.io/docs/glossary
     - sometimes it includes sensitive data, so store to secured backend
 
 - other commands
+  - terraform init -backend=false: initialize working directory without any accessing any configured remote backend
   - terraform fmt
-  - terraform validate
-  - terraform show
+  - terraform validate: validate configurations syntactically and internal consistently without accessing any remote services such as remote state and provider APIs
+  - terraform show: reads and outputs a terraform state or plan file
   - terraform state list
   - terraform apply -var "container_name=YetAnotherName"
   - terraform output -json
