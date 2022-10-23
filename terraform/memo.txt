@@ -3,6 +3,8 @@ https://learn.hashicorp.com/tutorials/terraform/docker-build?in=terraform/docker
 
 https://www.terraform.io/docs/glossary
 
+https://qiita.com/minamijoyo/items/1f57c62bed781ab8f4d7
+
 - steps
   - terraform init: creating initial files, loading any remote state, downloading modules
   - terraform apply: creates or updates infrastructure
@@ -35,3 +37,8 @@ https://www.terraform.io/docs/glossary
   - terraform state list
   - terraform apply -var "container_name=YetAnotherName"
   - terraform output -json
+
+- syntax
+  - builtin functions
+- expression
+  - 
