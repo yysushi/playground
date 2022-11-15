@@ -25,3 +25,15 @@ test("hello", async ({ page }) => {
   // Expect a title "to contain" a substring.
   await expect(page).toHaveTitle(/oog/);
 });
+
+// http://localhost:10000/JapanEast1-A/vnc_auto.html?path=JapanEast1-A
+test("hello2", async ({ page }) => {
+  await page.goto(
+    "http://localhost:10000/JapanEast1-A/vnc_auto.html?path=JapanEast1-A",
+  );
+
+  // Expect a title "to contain" a substring.
+  await expect(page).toHaveTitle(/noVNC/);
+
+        sagss;
+});
