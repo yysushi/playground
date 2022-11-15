@@ -18,3 +18,10 @@ test('homepage has title and links to intro page', async ({ page }) => {
   // Expects the URL to contain intro.
   await expect(page).toHaveURL(/.*intro/);
 });
+
+test('hello', async ({ page }) => {
+  await page.goto('https://google.com');
+
+  // Expect a title "to contain" a substring.
+  await expect(page).toHaveTitle(/oog/);
+});
