@@ -26,10 +26,10 @@ test("hello", async ({ page }) => {
   await expect(page).toHaveTitle(/oog/);
 });
 
-// http://localhost:10000/JapanEast1-A/vnc_auto.html?path=JapanEast1-A
+// http://localhost:10000/Region-A/vnc_auto.html?path=Region-A
 test("hello2", async ({ page }) => {
   await page.goto(
-    "http://localhost:10000/JapanEast1-A/vnc_auto.html?path=JapanEast1-A",
+    "http://localhost:10000/Region-A/vnc_auto.html?path=Region-A",
   );
 
   // Expect a title "to contain" a substring.
