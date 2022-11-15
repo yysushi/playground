@@ -1,0 +1,8 @@
+
+https://pip.pypa.io/en/stable/reference/build-system/pyproject-toml/
+
+https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
+
+https://betterprogramming.pub/a-pyproject-toml-developers-cheat-sheet-5782801fb3ed
+
+https://setuptools.pypa.io/en/latest/userguide/package_discovery.html#auto-discovery

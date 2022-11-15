@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "my_package"
+description = "My package description"
+dependencies = [
+  "requests",
+]
+dynamic = ["version"]
+
+[tool.setuptools]
+py-modules = ["a"]
+
+[project.optional-dependencies]
+test = ["isort", "flake8", "black"]
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
+line-length = 88
