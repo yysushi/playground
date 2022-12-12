@@ -1,0 +1,31 @@
+$ curl --proxy localhost:8080 -XPOST -d hoge=fuga http://httpbin.org/post -v
+$ curl --proxy localhost:8080 http://httpbin.org/ip -v
+
+$ telnet localhost 8080
+Trying ::1...
+Connected to localhost.
+Escape character is '^]'.
+GET http://httpbin.org/ip HTTP/1.1
+Host: httpbin.org
+Connection: close
+
+GET http://stackoverflow.com HTTP/1.1
+Host: stackoverflow.com
+GET http://example.com HTTP/1.1
+Host: example.com
+Connection: close
+
+
+User-Agent: curl/7.84.0
+Accept: */*
+Proxy-Connection: Keep-Alive
+
+$ telnet localhost 8080
+Trying ::1...
+Connected to localhost.
+Escape character is '^]'.
+POST http://httpbin.org/post HTTP/1.1
+Host: httpbin.org
+Content-Length: 9
+Content-Type: application/octet-stream
+Connection: close
