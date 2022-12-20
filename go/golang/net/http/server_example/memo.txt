@@ -16,3 +16,10 @@
   1. => TestServer8
   2. => TestServer9
   3. => TestServer10
+
+
+- command
+
+$ go test -v server_example -run TestServer9
+=== RUN   TestServer9
+^CFAIL  server_example  1.828s

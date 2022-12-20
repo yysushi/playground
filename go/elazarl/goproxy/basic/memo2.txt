@@ -1,0 +1,39 @@
+$ telnet localhost 8080
+Trying ::1...
+Connected to localhost.
+Escape character is '^]'.
+POST http://httpbin.org/post HTTP/1.1
+Host: httpbin.org
+Expect: 100-continue
+Content-Length: 9
+Content-Type: text/plain
+
+HTTP/1.1 100 Continue
+
+hoge=fuga
+HTTP/1.1 200 OK
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Origin: *
+Connection: keep-alive
+Content-Length: 399
+Content-Type: application/json
+Date: Thu, 15 Dec 2022 02:55:01 GMT
+Server: gunicorn/19.9.0
+
+{
+  "args": {},
+  "data": "hoge=fuga",
+  "files": {},
+  "form": {},
+  "headers": {
+    "Accept-Encoding": "gzip",
+    "Content-Length": "9",
+    "Hoge": "fuga",
+    "Host": "httpbin.org",
+    "User-Agent": "Go-http-client/1.1",
+    "X-Amzn-Trace-Id": "Root=1-639a8c80-77826c93700a4a1c0ecfa4cb"
+  },
+  "json": null,
+  "origin": "me, 143.189.206.211",
+  "url": "http://httpbin.org/post"
+}
