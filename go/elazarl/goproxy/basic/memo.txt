@@ -1,0 +1,55 @@
+- command
+
+```
+$ curl -v -x localhost:8080 http://httpbin.org/headers
+*   Trying 127.0.0.1:8080...
+* Connected to localhost (127.0.0.1) port 8080 (#0)
+> GET http://httpbin.org/headers HTTP/1.1
+> Host: httpbin.org
+> User-Agent: curl/7.84.0
+> Accept: */*
+> Proxy-Connection: Keep-Alive
+>
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< Access-Control-Allow-Credentials: true
+< Access-Control-Allow-Origin: *
+< Connection: keep-alive
+< Content-Length: 226
+< Content-Type: application/json
+< Date: Thu, 15 Dec 2022 00:26:06 GMT
+< Server: gunicorn/19.9.0
+<
+{
+  "headers": {
+    "Accept": "*/*",
+    "Accept-Encoding": "gzip",
+    "Hoge": "fuga",
+    "Host": "httpbin.org",
+    "User-Agent": "curl/7.84.0",
+    "X-Amzn-Trace-Id": "Root=1-639a699e-066665e66ded511218837286"
+  }
+}
+* Connection #0 to host localhost left intact
+```
+
+- proxy log
+
+```
+$ go run ./main.go
+2022/12/15 09:26:06 [001] INFO: Got request /headers httpbin.org GET http://httpbin.org/headers
+2022/12/15 09:26:06 on request
+        request: &http.Request{Method:"GET", URL:(*url.URL)(0xc000176000), Proto:"HTTP/1.1", ProtoMajor:1, ProtoMinor:1, Header:http.Header{"Accept":[]string{"*/*"}, "Proxy-Connection":[]string{"Keep-Alive"}, "User-Agent":[]string{"curl/7.84.0"}}, Body:http.noBody{}, GetBody:(func() (io.ReadCloser, error))(nil), ContentLength:0, TransferEncoding:[]string(nil), Close:false, Host:"httpbin.org", Form:url.Values(nil), PostForm:url.Values(nil), MultipartForm:(*multipart.Form)(nil), Trailer:http.Header(nil), RemoteAddr:"127.0.0.1:56940", RequestURI:"http://httpbin.org/headers", TLS:(*tls.ConnectionState)(nil), Cancel:(<-chan struct {})(nil), Response:(*http.Response)(nil), ctx:(*context.cancelCtx)(0xc000028400)}
+        context: &goproxy.ProxyCtx{Req:(*http.Request)(0xc000174000), Resp:(*http.Response)(nil), RoundTripper:goproxy.RoundTripper(nil), Error:error(nil), UserData:interface {}(nil), Session:1, certStore:goproxy.CertStorage(nil), Proxy:(*goproxy.ProxyHttpServer)(0xc0001362c0)}
+        context req: &http.Request{Method:"GET", URL:(*url.URL)(0xc000176000), Proto:"HTTP/1.1", ProtoMajor:1, ProtoMinor:1, Header:http.Header{"Accept":[]string{"*/*"}, "Proxy-Connection":[]string{"Keep-Alive"}, "User-Agent":[]string{"curl/7.84.0"}}, Body:http.noBody{}, GetBody:(func() (io.ReadCloser, error))(nil), ContentLength:0, TransferEncoding:[]string(nil), Close:false, Host:"httpbin.org", Form:url.Values(nil), PostForm:url.Values(nil), MultipartForm:(*multipart.Form)(nil), Trailer:http.Header(nil), RemoteAddr:"127.0.0.1:56940", RequestURI:"http://httpbin.org/headers", TLS:(*tls.ConnectionState)(nil), Cancel:(<-chan struct {})(nil), Response:(*http.Response)(nil), ctx:(*context.cancelCtx)(0xc000028400)}
+        context resp: (*http.Response)(nil)
+2022/12/15 09:26:06 [001] INFO: Sending request GET http://httpbin.org/headers
+2022/12/15 09:26:06 [001] INFO: Received response 200 OK
+2022/12/15 09:26:06 on response
+        response: &http.Response{Status:"200 OK", StatusCode:200, Proto:"HTTP/1.1", ProtoMajor:1, ProtoMinor:1, Header:http.Header{"Access-Control-Allow-Credentials":[]string{"true"}, "Access-Control-Allow-Origin":[]string{"*"}, "Connection":[]string{"keep-alive"}, "Content-Length":[]string{"226"}, "Content-Type":[]string{"application/json"}, "Date":[]string{"Thu, 15 Dec 2022 00:26:06 GMT"}, "Server":[]string{"gunicorn/19.9.0"}}, Body:(*http.bodyEOFSignal)(0xc000292040), ContentLength:226, TransferEncoding:[]string(nil), Close:false, Uncompressed:false, Trailer:http.Header(nil), Request:(*http.Request)(0xc000174000), TLS:(*tls.ConnectionState)(nil)}
+        context: &goproxy.ProxyCtx{Req:(*http.Request)(0xc000174000), Resp:(*http.Response)(0xc000280000), RoundTripper:goproxy.RoundTripper(nil), Error:error(nil), UserData:interface {}(nil), Session:1, certStore:goproxy.CertStorage(nil), Proxy:(*goproxy.ProxyHttpServer)(0xc0001362c0)}
+        context req: &http.Request{Method:"GET", URL:(*url.URL)(0xc000176000), Proto:"HTTP/1.1", ProtoMajor:1, ProtoMinor:1, Header:http.Header{"Accept":[]string{"*/*"}, "Hoge":[]string{"fuga"}, "User-Agent":[]string{"curl/7.84.0"}, "X-Forwarded-For":[]string{"me"}}, Body:http.noBody{}, GetBody:(func() (io.ReadCloser, error))(nil), ContentLength:0, TransferEncoding:[]string(nil), Close:false, Host:"httpbin.org", Form:url.Values(nil), PostForm:url.Values(nil), MultipartForm:(*multipart.Form)(nil), Trailer:http.Header(nil), RemoteAddr:"127.0.0.1:56940", RequestURI:"", TLS:(*tls.ConnectionState)(nil), Cancel:(<-chan struct {})(nil), Response:(*http.Response)(nil), ctx:(*context.cancelCtx)(0xc000028400)}
+        context resp: &http.Response{Status:"200 OK", StatusCode:200, Proto:"HTTP/1.1", ProtoMajor:1, ProtoMinor:1, Header:http.Header{"Access-Control-Allow-Credentials":[]string{"true"}, "Access-Control-Allow-Origin":[]string{"*"}, "Connection":[]string{"keep-alive"}, "Content-Length":[]string{"226"}, "Content-Type":[]string{"application/json"}, "Date":[]string{"Thu, 15 Dec 2022 00:26:06 GMT"}, "Server":[]string{"gunicorn/19.9.0"}}, Body:(*http.bodyEOFSignal)(0xc000292040), ContentLength:226, TransferEncoding:[]string(nil), Close:false, Uncompressed:false, Trailer:http.Header(nil), Request:(*http.Request)(0xc000174000), TLS:(*tls.ConnectionState)(nil)}
+2022/12/15 09:26:06 [001] INFO: Copying response to client 200 OK [200]
+2022/12/15 09:26:06 [001] INFO: Copied 226 bytes to client error=<nil>
+```

@@ -134,15 +134,5 @@ func TestServer10(t *testing.T) {
 	}
 }
 
-// func TestServer11(t *testing.T) {
-// 	h := &MyHandler{
-// 		Name: "handler11",
-// 	}
-// 	m := http.NewServeMux()
-// 	m.Handle("/handler11", h)
-// 	m2 := http.NewServeMux()
-// 	m2.Handle("/handler11", m)
-// 	if err := http.ListenAndServe(":8080", m2); err != nil {
-// 		panic(err)
-// 	}
-// }
+// TODO:
+// server able to be shutdown
