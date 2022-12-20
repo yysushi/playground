@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -31,6 +30,7 @@ func NewFileStream(path string) *FileStream {
 func (fs *FileStream) Write(b []byte) (nr int, err error) {
 	if fs.f == nil {
 		fs.f, err = os.Create(fs.path)
+		// fs.f, err = os.Create("/error")
 		if err != nil {
 			return 0, err
 		}
@@ -41,7 +41,7 @@ func (fs *FileStream) Write(b []byte) (nr int, err error) {
 func (fs *FileStream) Close() error {
 	fmt.Println("Close", fs.path)
 	if fs.f == nil {
-		return errors.New("FileStream was never written into")
+		return nil
 	}
 	return fs.f.Close()
 }
@@ -247,15 +247,15 @@ func main() {
 	if err != nil {
 		log.Fatal("can't open log file", err)
 	}
-	tr := transport.Transport{Proxy: transport.ProxyFromEnvironment}
+	// tr := transport.Transport{Proxy: transport.ProxyFromEnvironment}
 	// For every incoming request, override the RoundTripper to extract
 	// connection information. Store it is session context log it after
 	// handling the response.
 	proxy.OnRequest().DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
-		ctx.RoundTripper = goproxy.RoundTripperFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (resp *http.Response, err error) {
-			ctx.UserData, resp, err = tr.DetailedRoundTrip(req)
-			return
-		})
+		// ctx.RoundTripper = goproxy.RoundTripperFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (resp *http.Response, err error) {
+		// 	ctx.UserData, resp, err = tr.DetailedRoundTrip(req)
+		// 	return
+		// })
 		logger.LogReq(req, ctx)
 		return req, nil
 	})
