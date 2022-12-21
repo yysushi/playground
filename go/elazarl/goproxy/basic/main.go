@@ -226,6 +226,7 @@ func (srv *Server) serveProxy(parentCtx context.Context) {
 		func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 			ent := srv.NewEntry()
 			req.Body = ent.addReq(ctx.Req, req.Body)
+			req.Header.Add("X-Forwarded-For", req.RemoteAddr)
 			ctx.UserData = ent
 			return req, nil
 		})
@@ -234,6 +235,9 @@ func (srv *Server) serveProxy(parentCtx context.Context) {
 		func(resp *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
 			ent := (ctx.UserData).(*Entry)
 			resp.Body = ent.addResp(ctx.Resp, resp.Body)
+			// TODO: get remote address by connection
+			// then store as har entry's ServerIPAddress and set XFF
+			// https://pkg.go.dev/net/http/httptrace#GotConnInfo
 			return resp
 		})
 	var wg sync.WaitGroup
