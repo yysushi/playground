@@ -12,6 +12,19 @@ paths:
             type: string
             format: uuid
           required: true
+      responses:
+        '200':
+          description: ok
+          content:
+            'application/json':
+              schema:
+                required:
+                  - color
+                type: object
+                properties:
+                  color:
+                    type: string
+                additionalProperties: false
 
 info:
   title: Test
