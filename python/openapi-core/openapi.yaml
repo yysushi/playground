@@ -1,0 +1,18 @@
+---
+
+openapi: 3.1.0
+
+paths:
+  /hoge:
+    get:
+      parameters:
+        - in: header
+          name: X-Request-ID
+          schema:
+            type: string
+            format: uuid
+          required: true
+
+info:
+  title: Test
+  version: 1.0.0
