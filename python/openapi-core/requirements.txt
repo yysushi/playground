@@ -1,4 +1,5 @@
 openapi-core
-# pylint
-# mypy
 PyYAML
+
+pylint
+mypy
