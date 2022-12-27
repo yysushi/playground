@@ -74,6 +74,14 @@ except InvalidSchemaValue as e:
 else:
     raise AssertionError("unexpected no error")
 
+response = MyResponse(
+    200,
+    "application/json",
+    {},
+    json.dumps({"color": "cyan"}),
+)
+result2 = openapi_response_validator.validate(spec, request2, response)
+result2.raise_for_errors()
 
 response = MyResponse(
     200,
