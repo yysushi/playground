@@ -1,0 +1,19 @@
+
+- dataclass
+
+https://docs.python.org/3/library/dataclasses.html
+https://stackoverflow.com/q/57056029
+
+- hash of dataclass
+
+https://stackoverflow.com/a/52390734
+
+https://stackoverflow.com/a/2909119
+
+- dataclass vs namedtuple
+
+https://stackoverflow.com/q/51671699
+
+- in dataclass, InitVar (__post_init__) vs from_dict constructor
+
+https://realpython.com/python311-new-features/#improved-type-variables
