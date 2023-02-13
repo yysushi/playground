@@ -7,10 +7,10 @@ from __future__ import annotations
 import json
 from collections import defaultdict
 from collections.abc import Mapping
-from dataclasses import InitVar, dataclass, field
+from dataclasses import dataclass, field
 from functools import lru_cache
 from operator import itemgetter
-from typing import Any, ClassVar, Iterator, KeysView, Optional
+from typing import Any, ClassVar, Iterator, KeysView, Optional, Self
 
 import asteval
 import inflect
@@ -178,13 +178,20 @@ class DataStore:
 class Manager:
     "aaa"
 
-    descriptor_dict: InitVar[dict[str, Any]]
     data_store: DataStore
+    descriptors: dict[str, Descriptor]
 
-    descriptors: dict[str, Descriptor] = field(init=False, default_factory=dict)
+    @classmethod
+    def from_dict(
+        cls,
+        descriptor_dict: dict[str, Any],
+        raw_data_dict: dict[str, list[dict[str, Any]]],
+    ) -> Self:
+        "a"
 
-    def __post_init__(self, descriptor_dict: dict[str, Any]) -> None:
+        data_store = DataStore(raw_data_dict)
         parent_dict: dict[str, tuple[str, str]] = {}
+        descriptors = {}
         for name, raw_descriptor in descriptor_dict.items():
             try:
                 raw_parent = raw_descriptor.pop("parent")
@@ -192,11 +199,10 @@ class Manager:
                 pass
             else:
                 parent_dict[name] = itemgetter("name", "field")(raw_parent)
-            self.descriptors[name] = Descriptor(name=name, **raw_descriptor)
+            descriptors[name] = Descriptor(name=name, **raw_descriptor)
         for name, (parent_name, field_name_to_parent) in parent_dict.items():
-            self.descriptors[name].associate(
-                field_name_to_parent, self.descriptors[parent_name]
-            )
+            descriptors[name].associate(field_name_to_parent, descriptors[parent_name])
+        return cls(data_store=data_store, descriptors=descriptors)
 
     def eval_expression(self, name: str, expression: str) -> None:
         "a"
@@ -271,8 +277,10 @@ Bb:
 
 
 if __name__ == "__main__":
-    data_store = DataStore(raw_data_dict=yaml.safe_load(DATA_YAML))
-    m = Manager(descriptor_dict=yaml.safe_load(DESCRIPTOR_YAML), data_store=data_store)
+    m = Manager.from_dict(
+        descriptor_dict=yaml.safe_load(DESCRIPTOR_YAML),
+        raw_data_dict=yaml.safe_load(DATA_YAML),
+    )
     m.eval_expression("Aa", "123")
     m.eval_expression("Aa", "id")
     m.eval_expression("Bb", "ref.Aa.field1")
