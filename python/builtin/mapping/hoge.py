@@ -4,13 +4,13 @@ An example program to implement Mapping abc
 
 from __future__ import annotations
 
-import json
 from collections import defaultdict
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from functools import lru_cache
 from operator import itemgetter
-from typing import Any, ClassVar, Iterator, KeysView, Optional, Self
+from typing import (Any, ClassVar, Iterator, KeysView, NamedTuple, Optional,
+                    Self)
 
 import asteval
 import inflect
@@ -28,8 +28,7 @@ class NoChildError(Exception):
     child_name: str
 
 
-@dataclass
-class Scope:
+class Scope(NamedTuple):
     """aaa"""
 
     raw_data: dict[str, Any] | list[dict[str, Any]]
@@ -138,8 +137,7 @@ class Data(Mapping[str, Any]):
         return aeval.eval(expression)
 
 
-@dataclass
-class DataStore:
+class DataStore(NamedTuple):
     "aa"
     raw_data_dict: dict[str, list[dict[str, Any]]]
 
@@ -171,11 +169,10 @@ class DataStore:
         return dict(table)
 
     def __hash__(self) -> int:
-        return hash(json.dumps(self.raw_data_dict, sort_keys=True))
+        return hash(id(self))
 
 
-@dataclass
-class Manager:
+class Manager(NamedTuple):
     "aaa"
 
     data_store: DataStore
