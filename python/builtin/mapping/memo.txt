@@ -1,0 +1,8 @@
+
+https://docs.python.org/ja/3/reference/datamodel.html#object.__getattr__
+
+https://docs.python.org/ja/3/reference/datamodel.html#object.__getattribute__
+
+https://docs.python.org/ja/3/reference/datamodel.html#object.__get__
+
+https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping
