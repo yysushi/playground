@@ -1,0 +1,7 @@
+outpkg: mocks
+dir: mocks
+filename: "{{ .InterfaceNameSnake }}.go"
+packages:
+  github.com/yysushi/playground/go/vektra/mockery:
+    interfaces:
+      Doer:
