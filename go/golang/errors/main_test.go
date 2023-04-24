@@ -50,6 +50,29 @@ func TestErrorMessage(t *testing.T) {
 	assert.ErrorContains(t, fmt.Errorf("%w, %w", nil, err2), "%!w(<nil>), 2")
 	assert.Len(t, fmt.Errorf("%w, %w", nil, err2).Error(), 13)
 
+	// how to unwrap errors
+	// 1. wrap by fmt
+	if err, ok := errFmtWrapped.(interface{ Unwrap() error }); ok {
+		assert.Equal(t, errFmt, err.Unwrap())
+	} else {
+		t.Fatal("Unexpectedly failed to unwrap")
+	}
+	// 2. wrap by join
+	var err3, err4 = errors.New("4"), errors.New("4")
+	var wrappedError = errors.Join(err3, err4)
+	if errs, ok := wrappedError.(interface{ Unwrap() []error }); ok {
+		for idx, err := range errs.Unwrap() {
+			switch idx {
+			case 0:
+				assert.Equal(t, err, err3)
+			case 1:
+				assert.Equal(t, err, err4)
+			}
+		}
+	} else {
+		t.Fatal("Unexpectedly failed to unwrap")
+	}
+
 	// errors.As
 	var perr *os.PathError
 	assert.ErrorAs(t, fmt.Errorf("outer error: %w", &os.PathError{Path: "somewhere"}), &perr)
