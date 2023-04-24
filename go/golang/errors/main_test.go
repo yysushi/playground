@@ -37,6 +37,13 @@ func TestErrorMessage(t *testing.T) {
 	assert.ErrorIs(t, errFmt, errFmt)
 	assert.ErrorIs(t, errJoined, errNew)
 
+	// how to make errors
+	var err1, err2 = errors.New("1"), errors.New("2")
+	assert.ErrorIs(t, fmt.Errorf("%w, %w", err1, err2), err1)
+	assert.ErrorIs(t, fmt.Errorf("%w, %w", err1, err2), err2)
+	assert.ErrorIs(t, errors.Join(err1, err2), err1)
+	assert.ErrorIs(t, errors.Join(err1, err2), err2)
+
 	// errors.As
 	var perr *os.PathError
 	assert.ErrorAs(t, fmt.Errorf("outer error: %w", &os.PathError{Path: "somewhere"}), &perr)
