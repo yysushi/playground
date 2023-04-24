@@ -43,6 +43,12 @@ func TestErrorMessage(t *testing.T) {
 	assert.ErrorIs(t, fmt.Errorf("%w, %w", err1, err2), err2)
 	assert.ErrorIs(t, errors.Join(err1, err2), err1)
 	assert.ErrorIs(t, errors.Join(err1, err2), err2)
+	assert.ErrorIs(t, fmt.Errorf("%w, %w", nil, err2), err2)
+	assert.ErrorIs(t, errors.Join(nil, err2), err2)
+	assert.ErrorContains(t, errors.Join(nil, err2), "2")
+	assert.Len(t, errors.Join(nil, err2).Error(), 1)
+	assert.ErrorContains(t, fmt.Errorf("%w, %w", nil, err2), "%!w(<nil>), 2")
+	assert.Len(t, fmt.Errorf("%w, %w", nil, err2).Error(), 13)
 
 	// errors.As
 	var perr *os.PathError
