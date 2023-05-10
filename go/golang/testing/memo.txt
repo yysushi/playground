@@ -16,3 +16,5 @@ https://golang.org/pkg/testing/
 - go test -v -run Foo/B
 
 - go test -v -parallel 3
+
+- go test -v -bench .
