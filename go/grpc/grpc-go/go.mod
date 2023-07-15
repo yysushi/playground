@@ -1,10 +1,9 @@
-module playgrpc
+module github.com/yysushi/playground/go/grpc/grpc-go
 
 go 1.20
 
 require (
 	google.golang.org/grpc v1.55.0
-	google.golang.org/grpc/examples v0.0.0-20230524173754-59134c303c31
 	google.golang.org/protobuf v1.30.0
 )
 
