@@ -1,4 +1,6 @@
 
+https://buf.build/docs/tutorials/getting-started-with-buf-cli/
+
 1. configure buf
 
 $ cd proto
@@ -47,3 +49,13 @@ $ tree
             └── pet.proto
 
 11 directories, 8 files
+
+3. lint proto
+
+$ buf lint proto
+proto/google/type/datetime.proto:17:1:Package name "google.type" should be suffixed with a correctly formed version, such as "google.type.v1".
+proto/pet/v1/pet.proto:42:10:Field name "petID" should be lower_snake_case, such as "pet_id".
+proto/pet/v1/pet.proto:47:9:Service name "PetStore" should be suffixed with "Service".
+$ vim proto/pet/v1/pet.proto
+$ vim proto/buf.yaml
+$ buf lint proto

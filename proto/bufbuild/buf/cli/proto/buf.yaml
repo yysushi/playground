@@ -3,5 +3,6 @@ breaking:
   use:
     - FILE
 lint:
-  use:
-    - DEFAULT
+  ignore_only:
+    PACKAGE_VERSION_SUFFIX:
+      - google/type/datetime.proto
