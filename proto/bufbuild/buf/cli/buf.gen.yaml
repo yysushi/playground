@@ -2,7 +2,7 @@ version: v1
 managed:
   enabled: true
   go_package_prefix:
-    default: github.com/bufbuild/buf-tour/gen
+    default: github.com/yysushi/playground/proto/bufbuild/buf/cli
 plugins:
   - plugin: buf.build/protocolbuffers/go
     out: gen
