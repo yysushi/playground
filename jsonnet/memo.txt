@@ -1,0 +1,22 @@
+
+vim dashboard.jsonnet
+touch jsonnetfile.json
+
+jb install github.com/grafana/grafonnet/gen/grafonnet-latest@main
+
+jsonnet -J vendor dashboard.jsonnet
+
+
+```
+$ jsonnet -J vendor dashboard.jsonnet
+{
+   "schemaVersion": 36,
+   "time": {
+      "from": "now-6h",
+      "to": "now"
+   },
+   "timezone": "utc",
+   "title": "My Dashboard"
+}
+```
+
