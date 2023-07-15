@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package petstore.v1;
+
+service PetService {
+  rpc Create(CreateRequest) returns (CreateResponse) {}
+}
+
+message CreateRequest {
+  string name = 1;
+}
+
+message CreateResponse {
+  string nick_name = 1;
+}

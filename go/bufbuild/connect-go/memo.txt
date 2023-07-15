@@ -1,0 +1,78 @@
+
+- original repo
+
+github.com/bufbuild/connect-demo
+
+- build
+go build .
+./connect-demo
+
+- curl 
+curl --header "Content-Type: application/json" \
+  --data '{"sentence": "I feel happy."}' \
+  http://localhost:8080/buf.connect.demo.eliza.v1.ElizaService/Say
+
+- grpcurl
+grpcurl \
+  -d '{"sentence": "I feel happy."}' -plaintext  \
+  localhost:8080 \
+  buf.connect.demo.eliza.v1.ElizaService/Say
+
+grpcurl -plaintext localhost:8080 list
+
+
+how to call healthcheck?
+
+- grpc-health-probe
+grpc-health-probe -addr=localhost:8080
+
+- grpcui
+grpcui -plaintext localhost:8080
+
+- handler types
+
+connect
+grpchealth -> grpcurl, grpc-health-probe, k8s grpc liveness probe
+grpcreflect v1 -> grpcurl, grpcui, bloomrpc
+grpcreflect v1alpha
+
+wire compatible with Google's gRPC implementation
+
+```
+	mux.Handle(elizav1connect.NewElizaServiceHandler(
+		NewElizaServer(*streamDelayArg),
+		compress1KB,
+	))
+	mux.Handle(grpchealth.NewHandler(
+		grpchealth.NewStaticChecker(elizav1connect.ElizaServiceName),
+		compress1KB,
+	))
+	mux.Handle(grpcreflect.NewHandlerV1(
+		grpcreflect.NewStaticReflector(elizav1connect.ElizaServiceName),
+		compress1KB,
+	))
+	mux.Handle(grpcreflect.NewHandlerV1Alpha(
+		grpcreflect.NewStaticReflector(elizav1connect.ElizaServiceName),
+		compress1KB,
+	))
+```
+
+
+
+------------------
+
+curl --header "Content-Type: application/json" \
+  --data '{"name": "I feel happy."}' \
+  http://localhost:8080/petstore.v1.PetService/CreatePet
+
+grpcurl -plaintext localhost:8080 list
+petstore.v1.PetService
+
+grpcurl -plaintext localhost:8080 list petstore.v1.PetService
+petstore.v1.PetService.Create
+
+curl --header "Content-Type: application/json" \
+  --data '{"name": "fuzzy"}' \
+  http://localhost:8080/petstore.v1.PetService/Create
+
+{"nickName":"f"}
