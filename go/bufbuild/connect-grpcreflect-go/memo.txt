@@ -1,0 +1,8 @@
+
+grpcurl -plaintext localhost:8080 list
+
+acme.group.v1.GroupService
+acme.user.v1.UserService
+
+
+
