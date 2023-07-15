@@ -17,3 +17,33 @@ $ tree
 
 5 directories, 4 files
 $ buf build
+
+2. configure buf.gen.yaml and code gen
+
+$ touch buf.gen.yaml
+$ ls
+buf.gen.yaml    memo.txt        proto
+$ buf generate proto  # generate go codes under gen
+$ tree
+.
+├── buf.gen.yaml
+├── gen
+│   ├── google
+│   │   └── type
+│   │       └── datetime.pb.go
+│   └── pet
+│       └── v1
+│           ├── pet.pb.go
+│           └── petv1connect
+│               └── pet.connect.go
+├── memo.txt
+└── proto
+    ├── buf.yaml
+    ├── google
+    │   └── type
+    │       └── datetime.proto
+    └── pet
+        └── v1
+            └── pet.proto
+
+11 directories, 8 files
