@@ -1,0 +1,19 @@
+
+1. configure buf
+
+$ cd proto
+$ buf mod init  # generates buf.yaml
+$ tree
+.
+├── memo.txt
+└── proto
+    ├── buf.yaml
+    ├── google
+    │   └── type
+    │       └── datetime.proto
+    └── pet
+        └── v1
+            └── pet.proto
+
+5 directories, 4 files
+$ buf build
