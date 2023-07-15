@@ -1,6 +1,11 @@
 
 https://buf.build/docs/tutorials/getting-started-with-buf-cli/
 
+1. configure buf.yaml to manage proto files
+2. generate code using buf.gen.yaml
+3. lint proto files
+4. braking changes
+
 1. configure buf
 
 $ cd proto
@@ -59,3 +64,5 @@ proto/pet/v1/pet.proto:47:9:Service name "PetStore" should be suffixed with "Ser
 $ vim proto/pet/v1/pet.proto
 $ vim proto/buf.yaml
 $ buf lint proto
+
+4. breaking change

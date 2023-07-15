@@ -1,0 +1,11 @@
+
+https://buf.build/docs/breaking/rules/
+
+categories
+
+- FILE
+- PACKAGE
+- WIRE_JSON
+- WIRE
+
+
