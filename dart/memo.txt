@@ -1,0 +1,12 @@
+
+dart language-server
+https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#dartls
+
+dart format
+https://github.com/dense-analysis/ale/blob/master/autoload/ale/fixers/dart_format.vim
+
+dart analyze
+https://github.com/dense-analysis/ale/blob/master/ale_linters/dart/dart_analyze.vim
+
+
+dart compile exe main.dart
