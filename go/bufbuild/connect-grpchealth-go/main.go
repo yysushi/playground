@@ -1,0 +1,27 @@
+package main
+
+import (
+	"net/http"
+
+	grpchealth "github.com/bufbuild/connect-grpchealth-go"
+	"golang.org/x/net/http2"
+	"golang.org/x/net/http2/h2c"
+)
+
+func main() {
+	mux := http.NewServeMux()
+	checker := grpchealth.NewStaticChecker(
+		"acme.user.v1.UserService",
+		"acme.group.v1.GroupService",
+		// protoc-gen-connect-go generates package-level constants
+		// for these fully-qualified protobuf service names, so you'd more likely
+		// reference userv1.UserServiceName and groupv1.GroupServiceName.
+	)
+	mux.Handle(grpchealth.NewHandler(checker))
+	// If you don't need to support HTTP/2 without TLS (h2c), you can drop
+	// x/net/http2 and use http.ListenAndServeTLS instead.
+	http.ListenAndServe(
+		":8080",
+		h2c.NewHandler(mux, &http2.Server{}),
+	)
+}

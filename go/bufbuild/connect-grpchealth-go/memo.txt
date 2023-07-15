@@ -1,0 +1,17 @@
+
+
+grpc-health-probe -addr=localhost:8080
+status: SERVING
+
+grpcurl -plaintext -d '{"service": "acme.user.v1.UserService"}' localhost:8080 grpc.health.v1.Health/Check
+{
+  "status": "SERVING"
+}
+
+grpcurl -plaintext -d '{"service": ""}' localhost:8080 grpc.health.v1.Health/Check
+{
+  "status": "SERVING"
+}
+
+
+
