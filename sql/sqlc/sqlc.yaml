@@ -1,0 +1,13 @@
+version: '2'
+sql:
+- schema: sqlite/schema.sql
+  queries: sqlite/query.sql
+  engine: sqlite
+  database:
+    uri: file:authors?mode=memory&cache=shared
+  rules:
+  - sqlc/db-prepare
+  gen:
+    go:
+      package: authors
+      out: sqlite
