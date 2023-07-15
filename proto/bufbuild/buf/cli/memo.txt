@@ -23,7 +23,7 @@ $ tree
             └── pet.proto
 
 5 directories, 4 files
-$ buf build
+$ buf build  #  build buf module
 
 2. configure buf.gen.yaml and code gen
 
