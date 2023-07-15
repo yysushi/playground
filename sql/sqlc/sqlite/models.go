@@ -2,7 +2,7 @@
 // versions:
 //   sqlc v1.19.0
 
-package authors
+package sqlite
 
 import (
 	"database/sql"

@@ -9,5 +9,5 @@ sql:
   - sqlc/db-prepare
   gen:
     go:
-      package: authors
+      package: sqlite
       out: sqlite

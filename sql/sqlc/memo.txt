@@ -6,3 +6,7 @@ https://github.com/kyleconroy/sqlc/tree/main/examples/authors
 2. `vim schema.sql` `vim query.sql`
 
 3. `sqlc generate`
+
+---
+
+go test ./... -v
