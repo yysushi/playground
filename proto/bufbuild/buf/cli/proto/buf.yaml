@@ -2,7 +2,5 @@ version: v1
 breaking:
   use:
     - FILE
-lint:
-  ignore_only:
-    PACKAGE_VERSION_SUFFIX:
-      - google/type/datetime.proto
+deps:
+  - buf.build/googleapis/googleapis
