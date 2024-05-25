@@ -1,0 +1,5 @@
+
+https://pkg.go.dev/google.golang.org/protobuf/types/known/anypb#Any
+
+https://github.com/golang/protobuf/issues/1448
+https://www.envoyproxy.io/docs/envoy/latest/configuration/overview/extension#extension-configuration
