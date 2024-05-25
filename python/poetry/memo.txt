@@ -3,4 +3,5 @@ https://python-poetry.org/docs/basic-usage/
 
 poetry new poetry-demo
 
-
+cd poetry-demo
+poetry add httpx
