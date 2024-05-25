@@ -17,37 +17,28 @@ var keys = []string{
 type Handler struct {
 	slog.Handler
 
-	group string
+	groups []string
 }
 
 func (h *Handler) Handle(ctx context.Context, record slog.Record) error {
-	if value, ok := ctx.Value("trace_id").(string); ok && h.group == "" {
+	if value, ok := ctx.Value("trace_id").(string); ok {
 		record.AddAttrs(slog.String("trace_id", value))
 	}
 	return h.Handler.Handle(ctx, record)
 }
 
 func (h *Handler) WithAttrs(attrs []slog.Attr) slog.Handler {
-	if h.group == "" {
-		return &Handler{
-			Handler: h.Handler.WithAttrs(attrs),
-			group:   h.group,
+	for _, group := range h.groups {
+		for i := 0; i < len(attrs); i++ {
+			attrs[i] = slog.Group(group, attrs[i])
 		}
+		h.Handler = h.Handler.WithAttrs(attrs)
 	}
-	var groupedAttrs []slog.Attr
-	for _, attr := range attrs {
-		groupedAttrs = append(groupedAttrs, slog.Group(h.group, attr))
-	}
-	return &Handler{
-		Handler: h.Handler.WithAttrs(groupedAttrs),
-		group:   h.group,
-	}
+	return h
 }
 func (h *Handler) WithGroup(name string) slog.Handler {
-	return &Handler{
-		Handler: h,
-		group:   name,
-	}
+	h.groups = append(h.groups, name)
+	return h
 }
 
 func TestA(t *testing.T) {
@@ -60,7 +51,7 @@ func TestA(t *testing.T) {
 func TestB(t *testing.T) {
 	logger := slog.New(&Handler{
 		Handler: slog.NewTextHandler(os.Stderr, nil),
-		group:   "",
+		groups:  []string{},
 	})
 	// logger := slog.New(&Handler{
 	// 	Handler: slog.NewTextHandler(os.Stderr, nil),
