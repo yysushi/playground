@@ -26,4 +26,7 @@ func TestAny(t *testing.T) {
 	assert.IsType(t, pm, new(timestamppb.Timestamp))
 	// type check without unmarshal
 	assert.True(t, any.MessageIs(new(timestamppb.Timestamp)))
+
+	b, _ := any.UnmarshalNew()
+	assert.Equal(t, "google.protobuf.Timestamp", string(b.ProtoReflect().Descriptor().FullName()))
 }
