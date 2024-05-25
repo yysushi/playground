@@ -1,42 +1,8 @@
 package main_test
 
 import (
-	"fmt"
 	"testing"
 )
-
-func Sum[T int | float64](t []T) T {
-	var sum T
-	for _, tt := range t {
-		sum += tt
-	}
-	return sum
-}
-
-var sumInt = Sum[int]
-
-func TestA(t *testing.T) {
-	if Sum[int]([]int{1, 23}) != 24 {
-		t.Fail()
-	}
-	if sumInt([]int{1, 2, 3}) != 6 {
-		t.Fail()
-	}
-}
-
-type Animal interface {
-	Bark() string
-}
-
-func SayHello[T Animal](t T) string {
-	return fmt.Sprintf("%s Hello!", t.Bark())
-}
-
-type Dog struct{}
-
-func (Dog) Bark() string {
-	return "Woof!"
-}
 
 // create
 // update
@@ -47,19 +13,41 @@ func (Dog) Bark() string {
 // create network <- create & network impl
 // create network <- create & network impl
 
-func TestB(t *testing.T) {
-	dog := Dog{}
-	if SayHello[Dog](dog) != "Woof! Hello!" {
+type Validator interface {
+	Validate(string) bool
+}
+
+type Provider[T Validator] struct {
+	// NOTE: embedded field type cannot be a (pointer to a) type parameter (typecheck)
+	// T
+	validator T
+}
+
+// check "known limitations" in https://tip.golang.org/doc/go1.18#generics
+// and this https://github.com/golang/go/issues/49030
+func (p Provider[T]) Validate(input string) bool {
+	return p.validator.Validate(input)
+}
+
+func (p Provider[T]) Create(input string) bool {
+	if !p.Validate(input) {
+		return false
+	}
+	// some processings...
+	return true
+}
+
+type NetworkResource struct{}
+
+func (r NetworkResource) Validate(input string) bool {
+	return len(input) < 5
+}
+
+func TestA(t *testing.T) {
+	p := &Provider[NetworkResource]{
+		validator: NetworkResource{},
+	}
+	if p.Create("12345") {
 		t.Fail()
 	}
 }
-
-type Stringer interface {
-	String() string
-}
-
-type A struct {
-}
-func (a A) string() string{
-}
-A.String = A.string
