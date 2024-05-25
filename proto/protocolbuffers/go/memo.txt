@@ -1,0 +1,14 @@
+(cd proto && buf mod init)
+(cd proto && buf mod update)
+
+buf build
+
+buf generate
+
+
+---
+
+
+https://github.com/golang/protobuf/issues/179
+
+

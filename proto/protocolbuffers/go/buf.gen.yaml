@@ -1,0 +1,11 @@
+version: v1
+managed:
+  enabled: true
+  go_package_prefix:
+    default: github.com/yysushi/playground/proto/protocolbuffers/go/internal/gen
+    # except:
+    #   - buf.build/googleapis/googleapis
+plugins:
+  - plugin: buf.build/protocolbuffers/go
+    out: internal/gen
+    opt: paths=source_relative
