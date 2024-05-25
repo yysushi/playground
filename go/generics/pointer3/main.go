@@ -37,10 +37,15 @@ func (db *InMemoryDatabase) save(person Person) error {
 	return nil
 }
 
-func CreatePersonDB[T PersonDB](person Person) error {
-	db := new(T)
-	(*db).save(person)
+func CreatePersonDB[T any, T2 any, dbPointer DBPointer[T]](person Person) error {
+	var db dbPointer = new(T)
+	db.save(person)
 	return nil
+}
+
+type DBPointer[T any] interface {
+	*T
+	PersonDB
 }
 
 func main() {
@@ -48,5 +53,5 @@ func main() {
 		ID:   101,
 		Name: "John D",
 	}
-	CreatePersonDB[*LocalDatabase](person)
+	CreatePersonDB[LocalDatabase, int](person)
 }
