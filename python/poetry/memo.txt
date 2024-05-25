@@ -1,7 +1,22 @@
 
 https://python-poetry.org/docs/basic-usage/
 
+1. new project
+
 poetry new poetry-demo
 
+2. add dep
+
 cd poetry-demo
-poetry add httpx
+poetry add requests
+
+3. dev in the env
+
+cd poetry-demo
+poetry shell
+vim poetry_demo/request.py
+
+4. command in the env
+
+cd poetry-demo
+poetry run python -m unittest -v
