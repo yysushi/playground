@@ -1,0 +1,6 @@
+
+https://python-poetry.org/docs/basic-usage/
+
+poetry new poetry-demo
+
+
