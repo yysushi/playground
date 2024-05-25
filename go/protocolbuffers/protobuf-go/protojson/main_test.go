@@ -29,6 +29,9 @@ func TestMarshal(t *testing.T) {
 
 	v, _ = prototext.Marshal(tmpb)
 	assert.Equal(t, `seconds:1136189045`, string(v))
+
+	v, _ = proto.Marshal(tmpb)
+	assert.Equal(t, "\b\xf5\xbc\xe3\x9d\x04", string(v))
 }
 
 func TestProtoJson(t *testing.T) {
@@ -45,7 +48,7 @@ func TestProtoJson(t *testing.T) {
 		},
 		{
 			m:        any,
-			expected: `{"@type":"type.googleapis.com/google.protobuf.Duration", "value":"90s"}`,
+			expected: `{"@type":"type.googleapis.com/google.protobuf.Duration","value":"90s"}`,
 		},
 		{
 			m:        &emptypb.Empty{},
