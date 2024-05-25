@@ -35,10 +35,10 @@ func (db *InMemoryDatabase) save(person Person) error {
 	return nil
 }
 
-func CreatePersonDB[T PersonDB](person Person) error {
+func CreatePersonDB[T personDB](person Person) error {
 
 	db := new(T)
-	db.save(person)
+	(*db).save(person)
 	return nil
 }
 
@@ -47,5 +47,5 @@ func main() {
 		ID:   101,
 		Name: "John D",
 	}
-	CreatePersonDB[LocalDatabase](person)
+	CreatePersonDB[*LocalDatabase](person)
 }
