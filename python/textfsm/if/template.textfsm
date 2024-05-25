@@ -1,0 +1,25 @@
+# quoted from
+# https://github.com/networktocode/ntc-templates/blob/23131f73a22dfce0f4d1d3cfa62252e2e16b2f6e/ntc_templates/templates/juniper_junos_show_interfaces.textfsm
+Value Required INTERFACE (\S+)
+Value LINK_STATUS (\w+)
+Value ADMIN_STATE (\S+)
+Value HARDWARE_TYPE (\S+)
+Value DESCRIPTION (\w+.*)
+Value DESTINATION (\S+)
+Value LOCAL (\S+)
+Value MTU (\d+|Unlimited)
+
+Start
+  # (Line action, Record action, State transition) = (Continue, Record, -)
+  # Record the current collected value
+  # Retain the current line and do not resume matching from the first rule of the state. Continue processing rules as if a match did not occur
+  ^\s*\S+\s+interface -> Continue.Record
+  ^Physical\s+interface:\s+${INTERFACE},\s+${ADMIN_STATE},\s+Physical\s+link\s+is\s+${LINK_STATUS}
+  ^.*Description:\s+${DESCRIPTION}
+  ^.*ype:\s+${HARDWARE_TYPE},.*MTU:\s+${MTU}.*
+  ^\s+Logical\s+interface\s+${INTERFACE}
+  ^\s+Flags:\s+${LINK_STATUS}\s+\S+\s+\w+\s+(\S+\s+)*Encapsulation:
+  ^\s+Protocol\s+inet.*,\s+MTU:\s+${MTU}
+  ^.*Destination:\s+${DESTINATION},\s+Local:\s+${LOCAL},.*
+  ^\s*$$
+  ^{master:\d+}

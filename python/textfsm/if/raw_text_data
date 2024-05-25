@@ -1,0 +1,41 @@
+Physical interface: xe-0/0/0, Enabled, Physical link is Up
+  Interface index: 656, SNMP ifIndex: 543
+  Description: nw2_xe-0/1/0
+  Link-level type: Extended-VLAN-Bridge, MTU: 9216, MRU: 0, Speed: 10Gbps, BPDU Error: None, MAC-REWRITE Error: None, Loopback: Disabled, Source filtering: Disabled, Flow control: Disabled, Media type: Fiber
+  Device flags   : Present Running
+  Interface flags: SNMP-Traps Internal: 0x20004000
+  CoS queues     : 12 supported, 12 maximum usable queues
+  Current address: 11:11:11:11:11:12, Hardware address: 11:11:11:11:11:11
+  Last flapped   : 2024-01-30 08:26:47 UTC (1w4d 16:51 ago)
+  Input rate     : 1232 bps (1 pps)
+  Output rate    : 6888 bps (12 pps)
+  Active alarms  : None
+  Active defects : None
+  Interface transmit statistics: Disabled
+
+  Logical interface xe-0/0/0.101 (Index 566) (SNMP ifIndex 561)
+    Flags: Up SNMP-Traps 0x20004000 VLAN-Tag [ 0x8100.101 ]  Encapsulation: Extended-VLAN-Bridge
+    Input packets : 0
+    Output packets: 0
+    Protocol aenet, AE bundle: ae1.101
+
+Physical interface: xe-0/0/1, Enabled, Physical link is Up
+  Interface index: 657, SNMP ifIndex: 545
+  Description: nw2_xe-0/1/1
+  Link-level type: Extended-VLAN-Bridge, MTU: 9216, MRU: 0, Speed: 10Gbps, BPDU Error: None, MAC-REWRITE Error: None, Loopback: Disabled, Source filtering: Disabled, Flow control: Disabled, Media type: Fiber
+  Device flags   : Present Running
+  Interface flags: SNMP-Traps Internal: 0x20004000
+  CoS queues     : 12 supported, 12 maximum usable queues
+  Current address: 11:11:11:11:11:14, Hardware address: 11:11:11:11:11:13
+  Last flapped   : 2024-01-30 08:26:47 UTC (1w4d 16:51 ago)
+  Input rate     : 976 bps (0 pps)
+  Output rate    : 2448 bps (4 pps)
+  Active alarms  : None
+  Active defects : None
+  Interface transmit statistics: Disabled
+
+  Logical interface xe-0/0/1.101 (Index 569) (SNMP ifIndex 562)
+    Flags: Up SNMP-Traps 0x20004000 VLAN-Tag [ 0x8100.101 ]  Encapsulation: Extended-VLAN-Bridge
+    Input packets : 0
+    Output packets: 0
+    Protocol aenet, AE bundle: ae1.101

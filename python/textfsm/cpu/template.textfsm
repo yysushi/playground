@@ -1,0 +1,28 @@
+# 1. Value definitions (Chassis, Slot, State, Temp, CPUTemp, DRAM, Model)
+Value Filldown Chassis (.cc.?-re.)
+Value Required Slot (\d+)
+Value State (\w+)
+Value Temp (\d+)
+Value CPUTemp (\d+)
+Value DRAM (\d+)
+Value Model (\S+)
+
+# 2. State definitions (Start, RESlot)
+Start
+  # Fill down for subsequent record
+  ^${Chassis}
+  # Record the values collected and clear the buffer if no 'Reqquired' collected
+  # NOTE: but 'Filldown' data are retained
+  ^Routing Engine status: -> Record RESlot
+
+# A state transition was not strictly necessary but helpful for the example.
+RESlot
+  ^\s+Slot\s+${Slot}
+  ^\s+Current state\s+${State}
+  ^\s+Temperature\s+${Temp} degrees
+  ^\s+CPU temperature\s+${CPUTemp} degrees
+  ^\s+DRAM\s+${DRAM} MB
+  # Transit back to Start state
+  ^\s+Model\s+${Model} -> Start
+
+# An implicit EOF state outputs the last record.
