@@ -1,0 +1,5 @@
+
+https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/struct.proto
+
+https://pkg.go.dev/google.golang.org/protobuf/types/known/structpb
+
