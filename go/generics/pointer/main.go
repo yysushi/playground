@@ -35,14 +35,17 @@ func (db *InMemoryDatabase) save(person Person) error {
 	return nil
 }
 
+func CreatePersonDB[T PersonDB](person Person) error {
+
+	db := new(T)
+	db.save(person)
+	return nil
+}
+
 func main() {
-	db := new(LocalDatabase)
 	person := Person{
 		ID:   101,
 		Name: "John D",
 	}
-	db.save(person)
-
-	memorydb := new(InMemoryDatabase)
-	memorydb.save(person)
+	CreatePersonDB[LocalDatabase](person)
 }
