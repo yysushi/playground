@@ -3,19 +3,35 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"flag"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
+	"time"
 
 	"go.uber.org/fx"
+	"go.uber.org/fx/fxevent"
 )
 
-// Config ...
+func NewLogger() *log.Logger {
+	logger := log.New(os.Stdout, "", 0)
+	logger.Print("Executing NewLogger.")
+	return logger
+}
+
+func NewHandler(logger *log.Logger) (http.Handler, error) {
+	logger.Print("Executing NewHandler.")
+	return http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		logger.Print("Got a request.")
+	}), nil
+}
+
 type Config struct {
 	Addr string
 }
 
-// NewConfig ...
 func NewConfig() (*Config, error) {
 	configFileName := flag.String("config", "config.sample.json", "configuration file the server reads")
 	flag.Parse()
@@ -31,43 +47,74 @@ func NewConfig() (*Config, error) {
 	return &config, nil
 }
 
-// NewServeMux ...
-func NewServeMux() *http.ServeMux {
+func NewMux(lc fx.Lifecycle, logger *log.Logger, config *Config) *http.ServeMux {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
+	server := &http.Server{
+		Addr:    config.Addr,
+		Handler: mux,
+	}
+
+	lc.Append(fx.Hook{
+		OnStart: func(context.Context) error {
+			logger.Print("Starting HTTP server.")
+			go server.ListenAndServe()
+			return nil
+		},
+		OnStop: func(ctx context.Context) error {
+			logger.Print("Stopping HTTP server.")
+			return server.Shutdown(ctx)
+		},
 	})
 	return mux
 }
 
-// NewServer ...
-func NewServer(mux *http.ServeMux, config *Config) *http.Server {
-	return &http.Server{
-		Addr:    config.Addr,
-		Handler: mux,
-	}
+func Register(mux *http.ServeMux, h http.Handler) {
+	mux.Handle("/", h)
 }
 
-// Register ...
-func Register(lifecycle fx.Lifecycle, server *http.Server) {
-	lifecycle.Append(
-		fx.Hook{
-			OnStart: func(context.Context) error {
-				go server.ListenAndServe()
-				return nil
-			},
-			OnStop: func(ctx context.Context) error {
-				return server.Shutdown(ctx)
-			},
+func RegisterFailure(f *Failure) {
+}
+
+type Failure struct{}
+
+func NewFailure(lc fx.Lifecycle) *Failure {
+	lc.Append(fx.Hook{
+		OnStart: func(context.Context) error {
+			return errors.New("failed at start")
 		},
-	)
+		OnStop: func(ctx context.Context) error {
+			return nil
+		},
+	})
+	return &Failure{}
 }
 
 func main() {
-	fx.New(
-		fx.Provide(NewConfig),
-		fx.Provide(NewServer),
-		fx.Provide(NewServeMux),
-		fx.Invoke(Register),
-	).Run()
+	app := fx.New(
+		fx.Provide(
+			NewLogger,
+			NewHandler,
+			NewConfig,
+			NewMux,
+			NewFailure,
+		),
+		fx.Invoke(
+			Register,
+			RegisterFailure,
+		),
+		fx.WithLogger(
+			func() fxevent.Logger {
+				return fxevent.NopLogger
+			},
+		),
+	)
+	if err := app.Start(context.Background()); err != nil {
+		log.Fatal(err)
+	}
+	<-app.Done()
+	stopCtx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	if err := app.Stop(stopCtx); err != nil {
+		log.Fatal(err)
+	}
 }
