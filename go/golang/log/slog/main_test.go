@@ -3,7 +3,6 @@ package main_test
 import (
 	"bytes"
 	"context"
-	"fmt"
 	"log/slog"
 	"os"
 	"testing"
@@ -32,34 +31,34 @@ var keys = []string{
 	"span_id",
 }
 
-type Handler struct {
+type OTLPHandler struct {
 	slog.Handler
 
 	group string
 }
 
-func (h *Handler) Handle(ctx context.Context, record slog.Record) error {
+func (h *OTLPHandler) Handle(ctx context.Context, record slog.Record) error {
 	if value, ok := ctx.Value("trace_id").(string); ok && h.group == "" {
 		record.AddAttrs(slog.String("trace_id", value))
 	}
 	return h.Handler.Handle(ctx, record)
 }
 
-func (h *Handler) WithAttrs(attrs []slog.Attr) slog.Handler {
+func (h *OTLPHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
 	if h.group == "" {
-		return &Handler{Handler: h.Handler.WithAttrs(attrs)}
+		return &OTLPHandler{Handler: h.Handler.WithAttrs(attrs)}
 	}
 	var groupedAttrs []slog.Attr
 	for _, attr := range attrs {
 		groupedAttrs = append(groupedAttrs, slog.Group(h.group, attr))
 	}
-	return &Handler{
+	return &OTLPHandler{
 		Handler: h.Handler.WithAttrs(groupedAttrs),
 		group:   h.group,
 	}
 }
-func (h *Handler) WithGroup(name string) slog.Handler {
-	return &Handler{
+func (h *OTLPHandler) WithGroup(name string) slog.Handler {
+	return &OTLPHandler{
 		Handler: h,
 		group:   name,
 	}
@@ -75,7 +74,7 @@ func TestA(t *testing.T) {
 func TestB(t *testing.T) {
 	var buf bytes.Buffer
 
-	logger := slog.New(&Handler{
+	logger := slog.New(&OTLPHandler{
 		Handler: slog.NewTextHandler(&buf, &slog.HandlerOptions{ReplaceAttr: removeTime}),
 		group:   "",
 	})
@@ -106,26 +105,35 @@ func TestB(t *testing.T) {
 }
 
 func TestC(t *testing.T) {
-	// writer
-	f, err := os.Create("traces.txt")
-	require.NoError(t, err)
-	defer f.Close()
-	// exporter
-	exporter, err := stdouttrace.New(
-		stdouttrace.WithWriter(f),
-	)
-	require.NoError(t, err)
-	// trace provider
-	tp := sdktrace.NewTracerProvider(sdktrace.WithSyncer(exporter))
-	otel.SetTracerProvider(tp)
+	var spanA_ID [8]byte
+	var spanB_ID [8]byte
+	var spanA_TraceID [16]byte
+	var spanB_TraceID [16]byte
+	func() {
+		// writer
+		f, err := os.Create("traces.txt")
+		require.NoError(t, err)
+		defer f.Close()
+		// exporter
+		exporter, err := stdouttrace.New(
+			stdouttrace.WithWriter(f),
+		)
+		require.NoError(t, err)
+		// trace provider
+		tp := sdktrace.NewTracerProvider(sdktrace.WithSyncer(exporter))
+		otel.SetTracerProvider(tp)
 
-	tracer1 := otel.Tracer("tracer1")
-	ctx1, span1 := tracer1.Start(context.Background(), "span1", trace.WithNewRoot())
-	defer span1.End()
-	ctx2, span2 := tracer1.Start(ctx1, "span2")
-	defer span2.End()
-	fmt.Println(trace.SpanContextFromContext(ctx1).SpanID())
-	fmt.Println(trace.SpanContextFromContext(ctx1).TraceID())
-	fmt.Println(trace.SpanContextFromContext(ctx2).SpanID())
-	fmt.Println(trace.SpanContextFromContext(ctx2).TraceID())
+		tracer1 := otel.Tracer("tracer")
+		ctxA, spanA := tracer1.Start(context.Background(), "spanA", trace.WithNewRoot())
+		defer spanA.End()
+		ctxB, spanB := tracer1.Start(ctxA, "spanA")
+		defer spanB.End()
+		spanA_ID = trace.SpanContextFromContext(ctxA).SpanID()
+		spanB_ID = trace.SpanContextFromContext(ctxB).SpanID()
+		spanA_TraceID = trace.SpanContextFromContext(ctxA).TraceID()
+		spanB_TraceID = trace.SpanContextFromContext(ctxB).TraceID()
+	}()
+	assert.Equal(t, spanA_TraceID, spanB_TraceID)
+	assert.NotEqual(t, spanA_ID, spanB_ID)
+	// jq .Parent < traces.txt
 }
