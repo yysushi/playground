@@ -19,11 +19,11 @@ type Server[T1 myType, T2 []T1] struct {
 func (s *Server[T1, T2]) Hoge(T1) {
 }
 
-type myTypedServer = Server[myEntry, []myEntry]
+type myTypedServer = Server[*myEntry, []*myEntry]
 
 func main() {
 	s := &myTypedServer{
-		t: []myEntry{1},
+		t: []*myEntry{&myEntry{}},
 	}
 	fmt.Printf("%#v", s)
 	fmt.Println()
