@@ -72,20 +72,21 @@ func Register(mux *http.ServeMux, h http.Handler) {
 	mux.Handle("/", h)
 }
 
-func RegisterFailure(f *Failure) {
+func RegisterFailure(lc fx.Lifecycle, f *Failure) {
+	lc.Append(fx.Hook{
+		// OnStart: func(context.Context) error {
+		// 	// return errors.New("failed at start")
+		// 	return nil
+		// },
+		OnStop: func(ctx context.Context) error {
+			return errors.New("failed at start")
+		},
+	})
 }
 
 type Failure struct{}
 
-func NewFailure(lc fx.Lifecycle) *Failure {
-	lc.Append(fx.Hook{
-		OnStart: func(context.Context) error {
-			return errors.New("failed at start")
-		},
-		OnStop: func(ctx context.Context) error {
-			return nil
-		},
-	})
+func NewFailure() *Failure {
 	return &Failure{}
 }
 
