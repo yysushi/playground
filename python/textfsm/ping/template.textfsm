@@ -1,0 +1,6 @@
+Value CounterTransmitted (\d+)
+Value CounterReceived (\d+)
+Value RatioLoss (\d+)
+
+Start
+  ^${CounterTransmitted} packets transmitted, ${CounterReceived} packets received, ${RatioLoss}% packet loss -> Record
