@@ -18,18 +18,13 @@ func main() {
 	}
 	defer fd.Close()
 
-	// buf := new(strings.Builder)
-	// _, err = io.Copy(buf, fd)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// fmt.Println(buf)
-
 	cfg, err := config.LoadReader(fd)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("%#v\n", cfg.Archives)
+
+	cfg.Release.GitHub.Owner = "goreleaser"
+	cfg.Release.GitHub.Name = "goreleaser"
 
 	var ctx = rcontext.New(cfg)
 
@@ -39,4 +34,5 @@ func main() {
 			panic(err)
 		}
 	}
+	fmt.Printf("%#v\n", ctx.Config.Archives[0].NameTemplate)
 }
