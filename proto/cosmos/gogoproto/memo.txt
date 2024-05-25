@@ -1,0 +1,13 @@
+
+- dep
+
+https://github.com/cosmos/gogoproto/tree/main/protoc-gen-gocosmos
+
+- build
+
+buf mod init
+cd proto && buf mod update
+buf build
+
+# buf generate
+
