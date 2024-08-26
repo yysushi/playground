@@ -1,5 +1,5 @@
 package hoge
 
 func Hoge() string {
-	return "hoge"
+	return "hoge2"
 }
