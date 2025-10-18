@@ -1,6 +1,7 @@
-def main():
-    print("Hello from contextmanager!")
+from contextlib import contextmanager
 
+import tenacity as tc
 
-if __name__ == "__main__":
-    main()
+for retry in tc.Retrying():
+    with retry:
+        print("aiu")
