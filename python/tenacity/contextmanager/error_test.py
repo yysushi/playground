@@ -64,7 +64,6 @@ def attempts[T](
 
         stop = tc.stop_any(tc.stop_after_attempt(max_attempt), my_stop())
     else:
-        # retry = tc.retry_if_exception_type()  # default one
         stop = tc.stop_after_attempt(max_attempt)
 
     for retry in tc.Retrying(
@@ -127,7 +126,9 @@ def test_unexpected_no_error():
 
 def test_unexpected_no_error_with_immediate_exit():
     try:
-        for attempt in attempts(error=TargetException("hoge"), stop_error_type=SuccessError):
+        for attempt in attempts(
+            error=TargetException("hoge"), stop_error_type=SuccessError
+        ):
             with attempt:
                 target()
     except tc.RetryError as e:
