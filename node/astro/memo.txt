@@ -1,2 +1,6 @@
 https://docs.astro.build/en/tutorial
 
+npm run dev
+
+npm run build
+
