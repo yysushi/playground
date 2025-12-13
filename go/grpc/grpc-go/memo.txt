@@ -39,3 +39,11 @@ tshark -r data.pcap -d tcp.port==50051,http2
    30   0.009235    127.0.0.1 → 127.0.0.1    TCP 56 50051 → 62142 [ACK] Seq=155 Ack=218 Win=408064 Len=0 TSval=2562678091 TSecr=1429148546
    31   0.009358    127.0.0.1 → 127.0.0.1    TCP 56 50051 → 62142 [FIN, ACK] Seq=155 Ack=218 Win=408064 Len=0 TSval=2562678092 TSecr=1429148546
    32   0.009447    127.0.0.1 → 127.0.0.1    TCP 56 62142 → 50051 [ACK] Seq=218 Ack=156 Win=408128 Len=0 TSval=1429148547 TSecr=2562678092
+
+$ cat > ~/.config/wireshark/protobuf_search_paths <<EOF
+"$(pwd)/helloworld","TRUE"
+EOF
+$ sudo tshark -i lo0 -d tcp.port==50051,http2 -Y grpc
+Capturing on 'Loopback: lo0'
+   94   2.299251          ::1 → ::1          GRPC/PB(helloworld.SayHelloRequest) 97 DATA[1] (GRPC) (PROTOBUF) helloworld.SayHelloRequest name=world
+   98   2.299367          ::1 → ::1          GRPC/PB(helloworld.SayHelloResponse) 159 HEADERS[1]: 200 OK, DATA[1] (GRPC) (PROTOBUF) helloworld.SayHelloResponse message=Hello world, HEADERS[1]
