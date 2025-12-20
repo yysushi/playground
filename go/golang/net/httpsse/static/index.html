@@ -24,21 +24,19 @@
     <h3>Real-Time Logs</h3>
     <input
       id="filterBox"
-      placeholder="Fuzzy filter logs..."
+      placeholder="Fuzzy filter logs…"
       style="width: 100%; margin-bottom: 10px;"
     >
+
     <div id="logList"></div>
 
-    <script src="/static/fuse.basic.min.js"></script>
+    <script src="/fuse.basic.min.js"></script><!-- now at root -->
     <script>
     const logListEl = document.getElementById("logList");
     const filterBox = document.getElementById("filterBox");
-    const logs = []; // <== logs *must* be defined here
+    const logs = [];
 
-    let fuse = new Fuse(logs, {
-      keys: ["text"],
-      threshold: 0.3,
-    });
+    let fuse = new Fuse(logs, { keys: ["text"], threshold: 0.4 });
 
     function renderLogLines(list) {
       logListEl.innerHTML = "";
@@ -50,22 +48,16 @@
       });
     }
 
-    // SSE setup
-    const evtSource = new EventSource("http://localhost:8080/logs/stream");
+    const evtSource = new EventSource("/logs/stream");
     evtSource.onopen = () => console.log("SSE connected");
     evtSource.onmessage = (e) => {
-      console.log("Received:", e.data);
-
       const dataObj = { text: e.data };
       logs.push(dataObj);
-
       fuse.setCollection(logs);
 
-      const filterText = filterBox.value.trim();
-      const filtered = filterText
-        ? fuse.search(filterText).map((r) => r.item)
-        : logs;
-      renderLogLines(filtered);
+      const query = filterBox.value.trim();
+      const result = query ? fuse.search(query).map((r) => r.item) : logs;
+      renderLogLines(result);
     };
 
     evtSource.onerror = (err) => console.error("SSE error:", err);
