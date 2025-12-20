@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>SSE Log Viewer with Fuzzy Filter</title>
+    <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    #logList {
+      max-height: 500px;
+      overflow-y: scroll;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    .log-line {
+      margin: 0;
+      padding: 4px;
+      border-bottom: 1px solid #eee;
+    }
+    </style>
+  </head>
+  <body>
+    <h3>Real-Time Logs</h3>
+    <input
+      id="filterBox"
+      placeholder="Fuzzy filter logs..."
+      style="width: 100%; margin-bottom: 10px;"
+    >
+    <div id="logList"></div>
+
+    <script src="/static/fuse.basic.min.js"></script>
+    <script>
+    const logListEl = document.getElementById("logList");
+    const filterBox = document.getElementById("filterBox");
+    const logs = []; // <== logs *must* be defined here
+
+    let fuse = new Fuse(logs, {
+      keys: ["text"],
+      threshold: 0.3,
+    });
+
+    function renderLogLines(list) {
+      logListEl.innerHTML = "";
+      list.forEach((item) => {
+        const div = document.createElement("div");
+        div.className = "log-line";
+        div.textContent = item.text;
+        logListEl.appendChild(div);
+      });
+    }
+
+    // SSE setup
+    const evtSource = new EventSource("http://localhost:8080/logs/stream");
+    evtSource.onopen = () => console.log("SSE connected");
+    evtSource.onmessage = (e) => {
+      console.log("Received:", e.data);
+
+      const dataObj = { text: e.data };
+      logs.push(dataObj);
+
+      fuse.setCollection(logs);
+
+      const filterText = filterBox.value.trim();
+      const filtered = filterText
+        ? fuse.search(filterText).map((r) => r.item)
+        : logs;
+      renderLogLines(filtered);
+    };
+
+    evtSource.onerror = (err) => console.error("SSE error:", err);
+
+    filterBox.addEventListener("input", () => {
+      const q = filterBox.value.trim();
+      const out = q ? fuse.search(q).map((r) => r.item) : logs;
+      renderLogLines(out);
+    });
+    </script>
+  </body>
+</html>
