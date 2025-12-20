@@ -1,7 +1,7 @@
 package main
 
 import (
-	"crypto/rand"
+	"context"
 	_ "embed"
 	"encoding/json"
 	"fmt"
@@ -10,12 +10,9 @@ import (
 	"net/http"
 	"sync"
 	"time"
-)
 
-// embed index.html
-//
-//go:embed index.html
-var indexHTML []byte
+	"crypto/rand"
+)
 
 type client chan string
 
@@ -25,48 +22,78 @@ var (
 	logCh     = make(chan string)
 )
 
+//go:embed index.html
+var indexHTML []byte
+
+// FanoutHandler duplicates log records to two destinations:
+// 1) A wrapped handler (console/file/whatever)
+// 2) SSE broadcaster (via logCh)
+type FanoutHandler struct {
+	dest slog.Handler
+}
+
+func (h *FanoutHandler) Enabled(ctx context.Context, level slog.Level) bool {
+	return h.dest.Enabled(ctx, level)
+}
+
+func (h *FanoutHandler) Handle(ctx context.Context, r slog.Record) error {
+	// First let the wrapped handler (e.g. JSONHandler) output normally
+	err := h.dest.Handle(ctx, r)
+	if err != nil {
+		return err
+	}
+
+	// Prepare a structured map of the record
+	obj := map[string]any{
+		"time":  r.Time.Format(time.RFC3339),
+		"level": r.Level.String(),
+		"msg":   r.Message,
+	}
+
+	// Collect attributes
+	r.Attrs(func(a slog.Attr) bool {
+		obj[a.Key] = a.Value.String()
+		return true
+	})
+
+	// Marshal to JSON and send to SSE channel
+	if b, e := json.Marshal(obj); e == nil {
+		logCh <- string(b)
+	}
+
+	return nil
+}
+
+func (h *FanoutHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
+	return &FanoutHandler{dest: h.dest.WithAttrs(attrs)}
+}
+
+func (h *FanoutHandler) WithGroup(name string) slog.Handler {
+	return &FanoutHandler{dest: h.dest.WithGroup(name)}
+}
+
 func main() {
-	// Set up structured logging with JSONHandler
-	handler := slog.NewJSONHandler(log.Writer(), nil)
-	logger := slog.New(handler)
+	// Use JSONHandler as the base (console logging in JSON format)
+	baseHandler := slog.NewJSONHandler(log.Writer(), &slog.HandlerOptions{AddSource: true})
+
+	// Wrap it in our custom handler
+	logger := slog.New(&FanoutHandler{dest: baseHandler})
 	slog.SetDefault(logger)
 
-	// Example structured logging from the app
-	go func() {
-		ticker := time.NewTicker(500 * time.Millisecond)
-		defer ticker.Stop()
-		for range ticker.C {
-			data := map[string]any{
-				"time":  time.Now().Format(time.RFC3339),
-				"level": "INFO",
-				"msg":   rand.Text(),
-				"meta":  "example", // arbitrary extra fields
-			}
-			b, _ := json.Marshal(data)
-			logCh <- string(b)
-		}
-	}()
+	// Now all slog.<Level> calls will volume out to both console and logCh
 
-	// SSE endpoint
-	http.HandleFunc("/logs/stream", sseHandler)
-
-	// Serve only the embedded index.html at root
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		_, _ = w.Write(indexHTML)
 	})
 
-	// Broadcast loop: thread safe sending
+	http.HandleFunc("/logs/stream", sseHandler)
+
+	// Example real app logs:
 	go func() {
-		for logLine := range logCh {
-			clientsMu.Lock()
-			for c := range clients {
-				select {
-				case c <- logLine:
-				default:
-				}
-			}
-			clientsMu.Unlock()
+		for {
+			time.Sleep(500 * time.Millisecond)
+			slog.Info("periodic log", "random", rand.Text())
 		}
 	}()
 
