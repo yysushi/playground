@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/rand"
+	_ "embed"
 	"fmt"
 	"log"
 	"net/http"
@@ -17,9 +18,14 @@ var (
 	logCh     = make(chan string)
 )
 
+//go:embed static/index.html
+var indexHTML []byte
+
 func main() {
-	fs := http.FileServer(http.Dir("./static"))
-	http.Handle("/", fs)
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		_, _ = w.Write(indexHTML)
+	})
 	http.HandleFunc("/logs/stream", sseHandler)
 
 	// Broadcast loop
