@@ -5,9 +5,11 @@ import (
 	_ "embed"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"log/slog"
 	"net/http"
+	"os"
 	"sync"
 	"time"
 
@@ -25,75 +27,96 @@ var (
 //go:embed index.html
 var indexHTML []byte
 
-// FanoutHandler duplicates log records to two destinations:
-// 1) A wrapped handler (console/file/whatever)
-// 2) SSE broadcaster (via logCh)
-type FanoutHandler struct {
-	dest slog.Handler
+// multiHandler writes log records to two destinations:
+// - A console output handler (JSON over os.Stderr)
+// - The SSE broadcast channel
+type multiHandler struct {
+	consoleHandler slog.Handler
 }
 
-func (h *FanoutHandler) Enabled(ctx context.Context, level slog.Level) bool {
-	return h.dest.Enabled(ctx, level)
+func newMultiHandler() slog.Handler {
+	// Create a handler that writes JSON to STDERR (separate writer).
+	console := slog.NewJSONHandler(io.MultiWriter(os.Stderr), &slog.HandlerOptions{
+		AddSource: true,
+	})
+	return &multiHandler{consoleHandler: console}
 }
 
-func (h *FanoutHandler) Handle(ctx context.Context, r slog.Record) error {
-	// First let the wrapped handler (e.g. JSONHandler) output normally
-	err := h.dest.Handle(ctx, r)
-	if err != nil {
+func (h *multiHandler) Enabled(ctx context.Context, level slog.Level) bool {
+	return h.consoleHandler.Enabled(ctx, level)
+}
+
+func (h *multiHandler) Handle(ctx context.Context, r slog.Record) error {
+	// First write to the console handler
+	if err := h.consoleHandler.Handle(ctx, r); err != nil {
 		return err
 	}
 
-	// Prepare a structured map of the record
-	obj := map[string]any{
-		"time":  r.Time.Format(time.RFC3339),
-		"level": r.Level.String(),
-		"msg":   r.Message,
-	}
+	// Construct a map for JSON
+	entry := make(map[string]any)
+	entry["time"] = r.Time.Format(time.RFC3339)
+	entry["level"] = r.Level.String()
+	entry["msg"] = r.Message
 
-	// Collect attributes
+	// Add structured attributes
 	r.Attrs(func(a slog.Attr) bool {
-		obj[a.Key] = a.Value.String()
+		entry[a.Key] = a.Value.String()
 		return true
 	})
 
-	// Marshal to JSON and send to SSE channel
-	if b, e := json.Marshal(obj); e == nil {
+	// Marshal to JSON and send to logCh
+	if b, err := json.Marshal(entry); err == nil {
 		logCh <- string(b)
 	}
 
 	return nil
 }
 
-func (h *FanoutHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
-	return &FanoutHandler{dest: h.dest.WithAttrs(attrs)}
+func (h *multiHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
+	return &multiHandler{
+		consoleHandler: h.consoleHandler.WithAttrs(attrs),
+	}
 }
 
-func (h *FanoutHandler) WithGroup(name string) slog.Handler {
-	return &FanoutHandler{dest: h.dest.WithGroup(name)}
+func (h *multiHandler) WithGroup(name string) slog.Handler {
+	return &multiHandler{
+		consoleHandler: h.consoleHandler.WithGroup(name),
+	}
 }
 
 func main() {
-	// Use JSONHandler as the base (console logging in JSON format)
-	baseHandler := slog.NewJSONHandler(log.Writer(), &slog.HandlerOptions{AddSource: true})
-
-	// Wrap it in our custom handler
-	logger := slog.New(&FanoutHandler{dest: baseHandler})
+	// Use our multiHandler as the global default
+	logger := slog.New(newMultiHandler())
 	slog.SetDefault(logger)
 
-	// Now all slog.<Level> calls will volume out to both console and logCh
+	// Example structured log
+	go func() {
+		for {
+			time.Sleep(500 * time.Millisecond)
+			slog.Info("periodic log", "random", rand.Text())
+		}
+	}()
 
+	// SSE endpoint
+	http.HandleFunc("/logs/stream", sseHandler)
+
+	// Serve embedded index.html
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		_, _ = w.Write(indexHTML)
 	})
 
-	http.HandleFunc("/logs/stream", sseHandler)
-
-	// Example real app logs:
+	// Broadcast loop
 	go func() {
-		for {
-			time.Sleep(500 * time.Millisecond)
-			slog.Info("periodic log", "random", rand.Text())
+		for msg := range logCh {
+			clientsMu.Lock()
+			for c := range clients {
+				select {
+				case c <- msg:
+				default:
+				}
+			}
+			clientsMu.Unlock()
 		}
 	}()
 

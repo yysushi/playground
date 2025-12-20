@@ -50,7 +50,7 @@
     const logs = [];
 
     let fuse = new Fuse(logs, {
-      keys: ["msg", "level", "time"],
+      keys: ["random", "msg", "level", "time"],
       threshold: 0.4,
     });
 
@@ -63,6 +63,7 @@
             <div>${item.time}</div>
             <div>${item.level}</div>
             <div>${item.msg}</div>
+            <div>${item.random}</div>
           `;
         logListEl.appendChild(div);
       });
