@@ -1,10 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"crypto/rand"
 	_ "embed"
-	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -17,12 +17,12 @@ import (
 	slogmulti "github.com/samber/slog-multi"
 )
 
-type client chan string
+type client chan []byte
 
 var (
 	clients   = make(map[client]bool)
 	clientsMu sync.Mutex
-	logCh     = make(chan string)
+	logCh     = make(chan []byte)
 )
 
 //go:embed index.html
@@ -33,23 +33,15 @@ type sseBroadcastHandler struct {
 }
 
 func (h *sseBroadcastHandler) Handle(ctx context.Context, r slog.Record) error {
-	// Construct a map for JSON
-	entry := make(map[string]any)
-	entry["time"] = r.Time.Format(time.RFC3339)
-	entry["level"] = r.Level.String()
-	entry["msg"] = r.Message
-
-	// Add structured attributes
-	r.Attrs(func(a slog.Attr) bool {
-		entry[a.Key] = a.Value.String()
-		return true
-	})
-
-	// Marshal to JSON and send to logCh
-	if b, err := json.Marshal(entry); err == nil {
-		logCh <- string(b)
+	// slog.JSONHanndler, an inner handler, won't provide an easy way of marshaling record
+	// so, prepare additional json handler internally and get the value..
+	// maybe, performance issue..
+	buf := new(bytes.Buffer)
+	jsonHandler := slog.NewJSONHandler(buf, nil)
+	if err := jsonHandler.Handle(ctx, r); err != nil {
+		return err
 	}
-
+	logCh <- buf.Bytes()
 	return nil
 }
 
