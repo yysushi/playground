@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"crypto/rand"
 	_ "embed"
 	"encoding/json"
 	"fmt"
@@ -13,7 +14,7 @@ import (
 	"sync"
 	"time"
 
-	"crypto/rand"
+	slogmulti "github.com/samber/slog-multi"
 )
 
 type client chan string
@@ -27,31 +28,11 @@ var (
 //go:embed index.html
 var indexHTML []byte
 
-// multiHandler writes log records to two destinations:
-// - A console output handler (JSON over os.Stderr)
-// - The SSE broadcast channel
-type multiHandler struct {
-	consoleHandler slog.Handler
+type sseBroadcastHandler struct {
+	*slog.JSONHandler
 }
 
-func newMultiHandler() slog.Handler {
-	// Create a handler that writes JSON to STDERR (separate writer).
-	console := slog.NewJSONHandler(io.MultiWriter(os.Stderr), &slog.HandlerOptions{
-		AddSource: true,
-	})
-	return &multiHandler{consoleHandler: console}
-}
-
-func (h *multiHandler) Enabled(ctx context.Context, level slog.Level) bool {
-	return h.consoleHandler.Enabled(ctx, level)
-}
-
-func (h *multiHandler) Handle(ctx context.Context, r slog.Record) error {
-	// First write to the console handler
-	if err := h.consoleHandler.Handle(ctx, r); err != nil {
-		return err
-	}
-
+func (h *sseBroadcastHandler) Handle(ctx context.Context, r slog.Record) error {
 	// Construct a map for JSON
 	entry := make(map[string]any)
 	entry["time"] = r.Time.Format(time.RFC3339)
@@ -72,21 +53,16 @@ func (h *multiHandler) Handle(ctx context.Context, r slog.Record) error {
 	return nil
 }
 
-func (h *multiHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
-	return &multiHandler{
-		consoleHandler: h.consoleHandler.WithAttrs(attrs),
-	}
-}
-
-func (h *multiHandler) WithGroup(name string) slog.Handler {
-	return &multiHandler{
-		consoleHandler: h.consoleHandler.WithGroup(name),
-	}
-}
-
 func main() {
 	// Use our multiHandler as the global default
-	logger := slog.New(newMultiHandler())
+	logger := slog.New(
+		slogmulti.Fanout(
+			slog.NewJSONHandler(io.MultiWriter(os.Stderr), &slog.HandlerOptions{
+				AddSource: true,
+			}),
+			&sseBroadcastHandler{JSONHandler: slog.NewJSONHandler(io.Discard, nil)},
+		),
+	)
 	slog.SetDefault(logger)
 
 	// Example structured log
@@ -120,7 +96,7 @@ func main() {
 		}
 	}()
 
-	log.Println("Listening on :8080")
+	log.Println("Listening on :8081")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
